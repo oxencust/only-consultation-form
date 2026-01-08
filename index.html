@@ -1075,7 +1075,7 @@
                 
                 <label style="display: flex; align-items: flex-start; gap: 10px; padding: 14px; background: #fef9f8; border: 2px solid #f2ac98; border-radius: 10px; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="diseaseAgree" style="margin-top: 3px; min-width: 18px; min-height: 18px; accent-color: #b16056;">
-                    <span style="font-size: 15px; color: #5f846f; line-height: 1.5;">同意以上內容均為屬實填寫，如後續有發生以上狀況需優先告知教練</span>
+                    <span style="font-size: 15px; color: #5f846f; line-height: 1.5;">同意以上內容均為屬實填寫，<br>如後續有發生以上狀況需優先告知教練</span>
                 </label>
                 
                 <div id="diseaseError" class="error-message" style="display: none;">請至少選擇一項</div>
@@ -1161,7 +1161,7 @@
             <!-- Q7: 上課時段 -->
             <div class="question-page" data-page="7">
                 <h2>方便固定上課時段區間</h2>
-                <p class="subtitle">💡 我們會盡可能依照您的時間需求安排,時段範圍可超過範例時間</p>
+                <p class="subtitle">💡 我們會盡可能依照您的時間需求安排，<br>時段範圍可超過範例時間</p>
                 <div class="option-group">
                     <label class="option">
                         <input type="checkbox" name="timeSlot" value="平日白天" id="weekdayDay">
@@ -1202,7 +1202,7 @@
             <!-- Q8: 資料確認 -->
             <div class="question-page" data-page="8">
                 <h2>資料確認</h2>
-                <p class="subtitle">請確認所有資料正確,點擊「修改」按鈕可編輯</p>
+                <p class="subtitle">請確認所有資料正確，點擊「修改」按鈕可編輯</p>
                 
                 <div class="editable-section">
                     <button class="edit-button" onclick="toggleEdit('basic')">修改</button>
@@ -1338,7 +1338,7 @@
                 <div id="editError" class="error-message" style="display: none;"></div>
                 <div class="nav-buttons">
                     <button class="button secondary" onclick="prevPage()">上一步</button>
-                    <button class="button" onclick="saveEditedData()">確認無誤,繼續</button>
+                    <button class="button" onclick="saveEditedData()" style="text-align: center;">確認無誤<br>繼續</button>
                 </div>
             </div>
 
@@ -1878,7 +1878,7 @@
         }
 
         function loadVenueRules() {
-            var rulesHTML = '<div style="color: #5f846f; line-height: 1.6; font-size: 15px;"><h3 style="color: #5f846f; font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #7ac19a;">場館規範</h3><p style="margin-bottom: 18px; color: #66888e; font-size: 14px;">為提供穩定及高品質的課程體驗，<br>敬請上課學員配合以下規範</p><div style="display: grid; gap: 12px; margin-bottom: 18px;"><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">1.</strong><span>採全預約制<br>預約依照系統為準，<br>不做口頭保留</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">2.</strong><span>為維護三方權益，<br>到場上課務必進行紙本及電子簽到</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">3.</strong><span>除飲用水外，<br>私人物品請寄放於置物櫃</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">4.</strong><span>運動/伸展/等待區域禁止用餐</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">5.</strong><span>服裝規範：<br>全館須脫鞋、須著運動服裝</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">6.</strong><span>正課學員若攜陪同者，<br>陪同者不得滯留超過15分鐘</span></div></div><div style="background: linear-gradient(135deg, #66888e 0%, #5f846f 100%); color: #ffffff; padding: 18px; border-radius: 12px; margin: 18px 0; text-align: center; font-weight: 600; font-size: 14px;">為維護他人上課品質及權益，<br>場館有權拒絕未遵守規範者進入<br>※衡點健康保留最終解釋權</div><div style="background: #faece8; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 2px solid #f2ac98;"><h3 style="color: #c67566; font-size: 17px; font-weight: 700; margin-bottom: 14px;">取消及請假規範</h3><div style="display: grid; gap: 10px;"><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>一般「取消預約」規範：</strong><br>預約日的<span style="color: #ba9e60; font-weight: bold;">前一天晚上8點前</span>提出取消</div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>臨時「請假」規範：</strong><br>課程<span style="color: #ba9e60; font-weight: bold;">前3小時</span>提出請假<br><strong style="color: #c67566;">補課卡：300元</strong></div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong style="color: #c67566;">重要提醒：</strong><br>無遵守規則皆視同「曠課」，<br>曠課無法進行補課</div></div></div><div style="background: #daedec; padding: 14px; border-radius: 10px; text-align: center; color: #66888e; font-size: 13px;">如有疑問請洽官方LINE<br><span style="font-size: 12px;">衡點健康 © 2025</span></div></div>';
+            var rulesHTML = '<div style="color: #5f846f; line-height: 1.6; font-size: 15px;"><h3 style="color: #5f846f; font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #7ac19a;">場館規範</h3><p style="margin-bottom: 18px; color: #66888e; font-size: 14px;">為提供穩定及高品質的課程體驗，<br>敬請上課學員配合以下規範</p><div style="display: grid; gap: 12px; margin-bottom: 18px;"><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">1.</strong><span><strong>採全預約制</strong><br>預約依照系統為準，<br>不做口頭保留</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">2.</strong><span>為維護三方權益，<br>到場上課務必進行紙本及電子簽到</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">3.</strong><span>除飲用水外，<br>私人物品請寄放於置物櫃</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">4.</strong><span>運動/伸展/等待區域禁止用餐</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">5.</strong><span>服裝規範：<br>全館須脫鞋、須著運動服裝</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">6.</strong><span>正課學員若攜陪同者，<br>陪同者不得滯留超過15分鐘</span></div></div><div style="background: linear-gradient(135deg, #66888e 0%, #5f846f 100%); color: #ffffff; padding: 18px; border-radius: 12px; margin: 18px 0; text-align: center; font-weight: 600; font-size: 14px;">為維護他人上課品質及權益，<br>場館有權拒絕未遵守規範者進入<br>※衡點健康保留最終解釋權</div><div style="background: #faece8; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 2px solid #f2ac98;"><h3 style="color: #c67566; font-size: 17px; font-weight: 700; margin-bottom: 14px;">取消及請假規範</h3><div style="display: grid; gap: 10px;"><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>一般「取消預約」規範：</strong><br>預約日的<span style="color: #ba9e60; font-weight: bold;">前一天晚上8點前</span>提出取消</div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>臨時「請假」規範：</strong><br>課程<span style="color: #ba9e60; font-weight: bold;">前3小時</span>提出請假<br><strong style="color: #c67566;">補課卡：300元</strong></div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong style="color: #c67566;">重要提醒：</strong><br>無遵守規則皆視同「曠課」，<br>曠課無法進行補課</div></div></div><div style="background: #daedec; padding: 14px; border-radius: 10px; text-align: center; color: #66888e; font-size: 13px;">如有疑問請洽官方LINE<br><span style="font-size: 12px;">衡點健康 © 2025</span></div></div>';
             
             document.getElementById('venueRules').innerHTML = rulesHTML;
             
