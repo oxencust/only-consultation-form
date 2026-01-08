@@ -345,6 +345,20 @@
         }
 
         .basic-info-grid .full-width { grid-column: 1 / -1; }
+        
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .disease-edit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
 
         .nav-buttons {
             display: flex;
@@ -562,6 +576,270 @@
             #venueRules { padding: 15px !important; font-size: 14px !important; }
             #venueRules h3 { font-size: 16px !important; }
         }
+        
+        /* 小螢幕手機 (寬度 <= 380px) */
+        @media (max-width: 380px) {
+            body { padding: 8px; }
+            .content { padding: 20px 15px; }
+            h2 { font-size: 18px; }
+            .subtitle { font-size: 13px; }
+            .option { padding: 10px 12px; font-size: 14px; min-height: 48px; }
+            .option span { font-size: 14px; }
+            .option small { font-size: 11px; }
+            .button { font-size: 15px; padding: 12px 20px; min-height: 48px; }
+            .text-input { font-size: 15px; padding: 10px 14px; }
+            .editable-section { padding: 15px; }
+            .editable-section h3 { font-size: 15px; }
+            .edit-button { padding: 6px 12px; font-size: 13px; top: 15px; right: 15px; }
+            .edit-field label { font-size: 13px; }
+            .nav-buttons { gap: 8px; }
+            .nav-buttons .button { padding: 12px 15px; }
+            #venueRules { max-height: 350px !important; }
+        }
+        
+        /* 超小螢幕 (寬度 <= 320px) */
+        @media (max-width: 320px) {
+            body { padding: 5px; }
+            .content { padding: 18px 12px; }
+            h2 { font-size: 17px; }
+            .option { padding: 10px; gap: 8px; }
+            .option input[type="checkbox"],
+            .option input[type="radio"] { width: 20px; height: 20px; }
+            .button { font-size: 14px; padding: 11px 15px; }
+            .text-input { font-size: 14px; padding: 10px 12px; }
+        }
+        
+        /* 確保 grid 佈局在小螢幕上正確顯示 */
+        @media (max-width: 400px) {
+            .disease-grid,
+            .disease-edit-grid {
+                gap: 8px !important;
+            }
+            .disease-grid .option,
+            .disease-edit-grid .option { 
+                padding: 8px 10px !important; 
+                font-size: 13px !important;
+                min-height: 44px !important;
+            }
+            .disease-grid .option span,
+            .disease-edit-grid .option span {
+                font-size: 13px !important;
+            }
+        }
+        
+        /* 超窄螢幕改為單欄 */
+        @media (max-width: 340px) {
+            .disease-grid,
+            .disease-edit-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        /* 影片區塊響應式 */
+        .video-container {
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        
+        @media (max-width: 380px) {
+            .video-container video {
+                max-height: 220px;
+            }
+        }
+        
+        /* 課程子選項響應式 */
+        @media (max-width: 380px) {
+            [id$="Options"] {
+                padding-left: 25px !important;
+            }
+            [id$="Options"] .option {
+                padding: 8px 10px !important;
+            }
+        }
+        
+        /* 生日和性別選擇器響應式 */
+        .birthday-select-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .gender-select-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        @media (max-width: 340px) {
+            .birthday-select-group {
+                gap: 5px;
+            }
+            .birthday-select-group select {
+                padding: 10px 8px !important;
+                font-size: 14px !important;
+            }
+            .gender-select-group {
+                gap: 8px;
+            }
+        }
+        
+        /* 時段選擇區塊響應式 */
+        .time-slot-group .option {
+            min-height: 48px;
+        }
+        
+        @media (max-width: 380px) {
+            .time-slot-group .option {
+                padding: 10px 12px !important;
+            }
+            .time-slot-group .text-input {
+                font-size: 14px !important;
+                padding: 10px 12px !important;
+            }
+        }
+        
+        /* 資料確認頁面響應式 */
+        @media (max-width: 380px) {
+            .editable-section {
+                padding: 12px !important;
+            }
+            .edit-field {
+                margin-bottom: 12px !important;
+            }
+            .edit-field label {
+                font-size: 12px !important;
+            }
+            .edit-field .text-input,
+            .edit-field select,
+            .edit-field textarea {
+                font-size: 14px !important;
+                padding: 10px 12px !important;
+            }
+            #edit_diseases_container .option {
+                padding: 6px 8px !important;
+                font-size: 12px !important;
+            }
+            #edit_diseases_container .option span {
+                font-size: 12px !important;
+            }
+        }
+        
+        @media (max-width: 340px) {
+            #edit_diseases_container > div:first-child {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        
+        /* 導航按鈕響應式 */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .nav-buttons .button {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 380px) {
+            .nav-buttons {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .nav-buttons .button {
+                padding: 12px 10px !important;
+                font-size: 14px !important;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .nav-buttons {
+                flex-direction: column;
+            }
+            .nav-buttons .button {
+                width: 100%;
+            }
+        }
+        
+        /* 完成頁面響應式 */
+        @media (max-width: 380px) {
+            .completion-modern {
+                padding: 30px 15px !important;
+            }
+            .completion-title {
+                font-size: 20px !important;
+            }
+            .completion-subtitle {
+                font-size: 14px !important;
+            }
+            .completion-icon-bg {
+                width: 80px !important;
+                height: 80px !important;
+            }
+            .completion-icon {
+                font-size: 40px !important;
+            }
+        }
+        
+        /* Email 建議選項響應式 */
+        #emailDomainSuggestions {
+            max-width: 100%;
+        }
+        
+        .email-domain-item {
+            padding: 10px 12px;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 380px) {
+            .email-domain-item {
+                padding: 12px 10px;
+                font-size: 13px;
+            }
+        }
+        
+        /* 場館規範頁面響應式 */
+        @media (max-width: 380px) {
+            #venueRules {
+                max-height: 300px !important;
+                padding: 12px !important;
+                font-size: 13px !important;
+            }
+            #venueRules h3 {
+                font-size: 15px !important;
+            }
+            #agreeRulesLabel {
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+        }
+        
+        /* 確保所有 flex 容器不溢出 */
+        .option-group,
+        .edit-field,
+        .editable-section {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        /* 確保長文字換行 */
+        .option span,
+        .edit-field label,
+        .completion-subtitle {
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
@@ -613,23 +891,65 @@
 
             <!-- Q2: 課程偏好 -->
             <div class="question-page" data-page="2">
-                <h2>您偏好的課程類型?<span class="required">*必填</span></h2>
-                <p class="subtitle">可複選多個課程</p>
+                <h2>想預約體驗哪項課程?<span class="required">*必填</span></h2>
+                <p class="subtitle">體驗項目可參考影片</p>
+                
+                <!-- 影片區塊 -->
+                <div class="video-container">
+                    <video id="courseVideo" loop controls playsinline preload="auto">
+                        <source src="https://ik.imagekit.io/hanhealth/2505AI%E6%AA%A2%E6%B8%AC.mov?tr=f-mp4" type="video/mp4">
+                        您的瀏覽器不支援影片播放
+                    </video>
+                </div>
+                
                 <div class="option-group">
-                    <label class="option">
-                        <input type="checkbox" name="course" value="重量訓練">
-                        <span>重量訓練</span>
+                    <!-- 第一項：AI 3D體態檢測 -->
+                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="radio" name="course" value="AI 3D體態檢測" id="courseAI">
+                            <span>AI 3D體態檢測 首次體驗$1500<br><small style="color: #808080;">(贈送一堂運動體驗課)</small></span>
+                        </div>
+                        <div id="courseAIOptions" style="display: none; width: 100%; margin-top: 12px; padding-left: 34px;">
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="courseAISub" value="重訓(45分鐘)">
+                                    <span>重訓<small style="color: #808080; margin-left: 8px;">45分鐘</small></span>
+                                </label>
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="courseAISub" value="皮拉提斯(45分鐘)">
+                                    <span>皮拉提斯<small style="color: #808080; margin-left: 8px;">45分鐘</small></span>
+                                </label>
+                            </div>
+                        </div>
                     </label>
-                    <label class="option">
-                        <input type="checkbox" name="course" value="器械皮拉提斯">
-                        <span>器械皮拉提斯</span>
+                    
+                    <!-- 第二項：不檢測僅體驗運動課程 -->
+                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="radio" name="course" value="不檢測僅體驗運動課程" id="courseOnly">
+                            <span>不檢測僅體驗運動課程</span>
+                        </div>
+                        <div id="courseOnlyOptions" style="display: none; width: 100%; margin-top: 12px; padding-left: 34px;">
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="courseOnlySub" value="重訓(45分鐘/$500)">
+                                    <span>重訓<small style="color: #808080; margin-left: 8px;">45分鐘/$500</small></span>
+                                </label>
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="courseOnlySub" value="皮拉提斯(45分鐘/$800)">
+                                    <span>皮拉提斯<small style="color: #808080; margin-left: 8px;">45分鐘/$800</small></span>
+                                </label>
+                            </div>
+                        </div>
                     </label>
+                    
+                    <!-- 第三項：肌肉賦能伸展 -->
                     <label class="option">
-                        <input type="checkbox" name="course" value="伸展課程">
-                        <span>伸展課程</span>
+                        <input type="radio" name="course" value="肌肉賦能伸展(30分鐘/$500)" id="courseStretch">
+                        <span>肌肉賦能伸展<small style="color: #808080; margin-left: 8px;">30分鐘/$500</small></span>
                     </label>
                 </div>
-                <div id="courseError" class="error-message" style="display: none;">請至少選擇一項課程類型</div>
+                <div id="courseError" class="error-message" style="display: none;">請選擇一項體驗課程</div>
                 <div class="nav-buttons">
                     <button class="button secondary" onclick="prevPage()">上一步</button>
                     <button class="button" onclick="nextPage()">下一步</button>
@@ -663,7 +983,7 @@
                 <h2>疾病史 <span class="required">*必填</span></h2>
                 <p class="subtitle">請選擇所有與您健康史相關的疾病項目</p>
                 
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px;">
+                <div class="disease-grid">
                     <label class="option">
                         <input type="checkbox" name="disease" value="心臟病">
                         <span>心臟病</span>
@@ -736,21 +1056,21 @@
                             <input type="checkbox" name="disease" value="關節問題" id="jointIssue">
                             <span>關節問題</span>
                         </div>
-                        <input type="text" class="text-input detail-input" id="jointDetail" placeholder="例如:右膝關節疼痛3個月" style="display: none; width: 100%;">
+                        <input type="text" class="text-input detail-input" id="jointDetail" placeholder="例如:右膝關節疼痛3個月 *必填" style="display: none; width: 100%;">
                     </label>
                     <label class="option" style="flex-direction: column; align-items: flex-start;">
                         <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                             <input type="checkbox" name="disease" value="脊椎問題" id="spineIssue">
                             <span>脊椎問題</span>
                         </div>
-                        <input type="text" class="text-input detail-input" id="spineDetail" placeholder="例如:腰椎輕微突出" style="display: none; width: 100%;">
+                        <input type="text" class="text-input detail-input" id="spineDetail" placeholder="例如:腰椎輕微突出 *必填" style="display: none; width: 100%;">
                     </label>
                     <label class="option" style="flex-direction: column; align-items: flex-start;">
                         <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                             <input type="checkbox" name="disease" value="其他" id="otherDisease">
                             <span>其他</span>
                         </div>
-                        <input type="text" class="text-input detail-input" id="otherDetail" placeholder="例如:偏頭痛、鼻炎等" style="display: none; width: 100%;">
+                        <input type="text" class="text-input detail-input" id="otherDetail" placeholder="例如:偏頭痛、鼻炎等 *必填" style="display: none; width: 100%;">
                     </label>
                     <label class="option">
                         <input type="checkbox" name="disease" value="無" id="noDisease">
@@ -788,7 +1108,7 @@
                     
                     <div class="edit-field full-width">
                         <label>生日 <span class="required">*</span></label>
-                        <div style="display: flex; gap: 8px;">
+                        <div class="birthday-select-group">
                             <select id="birthdayYear" class="text-input" style="flex: 1;">
                                 <option value="">年</option>
                             </select>
@@ -804,7 +1124,7 @@
                     
                     <div class="edit-field full-width">
                         <label>性別 <span class="required">*</span></label>
-                        <div style="display: flex; gap: 10px;">
+                        <div class="gender-select-group">
                             <label class="option" style="flex: 1; margin: 0;">
                                 <input type="radio" name="genderSelect" value="男">
                                 <span>男</span>
@@ -846,25 +1166,25 @@
                         <input type="checkbox" name="timeSlot" value="平日白天" id="weekdayDay">
                         <span>平日白天</span>
                     </label>
-                    <input type="text" class="text-input" id="weekdayDayTime" placeholder="例: 9-17 或 09:00-17:00" style="display: none; margin-top: -5px;">
+                    <input type="text" class="text-input" id="weekdayDayTime" placeholder="例: 9-17 或 09:00-17:00 *必填" style="display: none; margin-top: -5px;">
                     
                     <label class="option">
                         <input type="checkbox" name="timeSlot" value="平日晚上(尖峰)" id="weekdayNight">
                         <span>平日晚上(尖峰)</span>
                     </label>
-                    <input type="text" class="text-input" id="weekdayNightTime" placeholder="例: 18-21 或 18:00-21:00" style="display: none; margin-top: -5px;">
+                    <input type="text" class="text-input" id="weekdayNightTime" placeholder="例: 18-21 或 18:00-21:00 *必填" style="display: none; margin-top: -5px;">
                     
                     <label class="option">
                         <input type="checkbox" name="timeSlot" value="假日白天(尖峰)" id="weekendDay">
                         <span>假日白天(尖峰)</span>
                     </label>
-                    <input type="text" class="text-input" id="weekendDayTime" placeholder="例: 9-17 或 09:00-17:00" style="display: none; margin-top: -5px;">
+                    <input type="text" class="text-input" id="weekendDayTime" placeholder="例: 9-17 或 09:00-17:00 *必填" style="display: none; margin-top: -5px;">
                     
                     <label class="option">
                         <input type="checkbox" name="timeSlot" value="假日晚上" id="weekendNight">
                         <span>假日晚上</span>
                     </label>
-                    <input type="text" class="text-input" id="weekendNightTime" placeholder="例: 18-21 或 18:00-21:00" style="display: none; margin-top: -5px;">
+                    <input type="text" class="text-input" id="weekendNightTime" placeholder="例: 18-21 或 18:00-21:00 *必填" style="display: none; margin-top: -5px;">
                     
                     <label class="option">
                         <input type="checkbox" name="timeSlot" value="彈性不固定">
@@ -935,47 +1255,161 @@
                         </div>
                     </div>
                     <div class="edit-field">
-                        <label>課程偏好</label>
+                        <label>預約體驗課程</label>
                         <div id="edit_course_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
                         <div id="edit_course_container" style="display: none;">
-                            <select id="edit_course" class="text-input" multiple size="3" style="height: auto;">
-                                <option value="重量訓練">重量訓練</option>
-                                <option value="器械皮拉提斯">器械皮拉提斯</option>
-                                <option value="伸展課程">伸展課程</option>
-                            </select>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label class="option" style="margin: 0; padding: 10px 12px; flex-direction: column; align-items: flex-start;">
+                                    <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                                        <input type="radio" name="editCourse" value="AI 3D體態檢測" id="editCourseAI">
+                                        <span>AI 3D體態檢測 $1500<small style="color: #808080; margin-left: 5px;">(贈送一堂運動體驗課)</small></span>
+                                    </div>
+                                    <div id="editCourseAIOptions" style="display: none; width: 100%; margin-top: 10px; padding-left: 30px;">
+                                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                                            <label class="option" style="margin: 0; padding: 8px 12px;">
+                                                <input type="radio" name="editCourseAISub" value="重訓(45分鐘)">
+                                                <span>重訓 <small style="color: #808080;">45分鐘</small></span>
+                                            </label>
+                                            <label class="option" style="margin: 0; padding: 8px 12px;">
+                                                <input type="radio" name="editCourseAISub" value="皮拉提斯(45分鐘)">
+                                                <span>皮拉提斯 <small style="color: #808080;">45分鐘</small></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="option" style="margin: 0; padding: 10px 12px; flex-direction: column; align-items: flex-start;">
+                                    <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                                        <input type="radio" name="editCourse" value="不檢測僅體驗運動課程" id="editCourseOnly">
+                                        <span>不檢測僅體驗運動課程</span>
+                                    </div>
+                                    <div id="editCourseOnlyOptions" style="display: none; width: 100%; margin-top: 10px; padding-left: 30px;">
+                                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                                            <label class="option" style="margin: 0; padding: 8px 12px;">
+                                                <input type="radio" name="editCourseOnlySub" value="重訓(45分鐘/$500)">
+                                                <span>重訓 <small style="color: #808080;">45分鐘/$500</small></span>
+                                            </label>
+                                            <label class="option" style="margin: 0; padding: 8px 12px;">
+                                                <input type="radio" name="editCourseOnlySub" value="皮拉提斯(45分鐘/$800)">
+                                                <span>皮拉提斯 <small style="color: #808080;">45分鐘/$800</small></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </label>
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="editCourse" value="肌肉賦能伸展(30分鐘/$500)" id="editCourseStretch">
+                                    <span>肌肉賦能伸展 <small style="color: #808080;">30分鐘/$500</small></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="edit-field">
                         <label>運動經驗</label>
                         <div id="edit_exerciseExp_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
+                        <div id="edit_exerciseExp_container" style="display: none;">
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="editExerciseExp" value="有" id="editHasExerciseExp">
+                                    <span>有</span>
+                                </label>
+                                <input type="text" class="text-input" id="edit_exerciseExp_detail" placeholder="請說明運動經驗（例如：重訓2年、瑜珈1年）*必填" style="display: none;">
+                                <label class="option" style="margin: 0; padding: 10px 12px;">
+                                    <input type="radio" name="editExerciseExp" value="無" id="editNoExerciseExp">
+                                    <span>無</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="edit-field">
                         <label>疾病史</label>
                         <div id="edit_diseases_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
                         <div id="edit_diseases_container" style="display: none;">
-                            <select id="edit_diseases" class="text-input" multiple size="8" style="height: auto;">
-                                <option value="心臟病">心臟病</option>
-                                <option value="心絞痛">心絞痛</option>
-                                <option value="糖尿病">糖尿病</option>
-                                <option value="疝氣/脫腸">疝氣/脫腸</option>
-                                <option value="高血壓">高血壓</option>
-                                <option value="氣喘">氣喘</option>
-                                <option value="貧血">貧血</option>
-                                <option value="癲癇">癲癇</option>
-                                <option value="甲狀腺問題">甲狀腺問題</option>
-                                <option value="靜脈瘤">靜脈瘤</option>
-                                <option value="惡性腫瘤">惡性腫瘤</option>
-                                <option value="椎間盤突出">椎間盤突出</option>
-                                <option value="習慣性脫臼">習慣性脫臼</option>
-                                <option value="脊椎滑脫">脊椎滑脫</option>
-                                <option value="骨質疏鬆症">骨質疏鬆症</option>
-                                <option value="痛風/風濕">痛風/風濕</option>
-                                <option value="關節問題">關節問題</option>
-                                <option value="脊椎問題">脊椎問題</option>
-                                <option value="其他">其他</option>
-                                <option value="無">無</option>
-                            </select>
-                            <input type="text" id="edit_diseases_detail" class="text-input" placeholder="如有其他說明請在此填寫（例如：右膝關節疼痛3個月）" style="margin-top: 10px;">
+                            <div class="disease-edit-grid">
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="心臟病">
+                                    <span>心臟病</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="心絞痛">
+                                    <span>心絞痛</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="糖尿病">
+                                    <span>糖尿病</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="疝氣/脫腸">
+                                    <span>疝氣/脫腸</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="高血壓">
+                                    <span>高血壓</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="氣喘">
+                                    <span>氣喘</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="貧血">
+                                    <span>貧血</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="癲癇">
+                                    <span>癲癇</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="甲狀腺問題">
+                                    <span>甲狀腺問題</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="靜脈瘤">
+                                    <span>靜脈瘤</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="惡性腫瘤">
+                                    <span>惡性腫瘤</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="椎間盤突出">
+                                    <span>椎間盤突出</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="習慣性脫臼">
+                                    <span>習慣性脫臼</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="脊椎滑脫">
+                                    <span>脊椎滑脫</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="骨質疏鬆症">
+                                    <span>骨質疏鬆症</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="痛風/風濕">
+                                    <span>痛風/風濕</span>
+                                </label>
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="無">
+                                    <span>無</span>
+                                </label>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="關節問題" id="editJointIssue">
+                                    <span>關節問題</span>
+                                </label>
+                                <input type="text" class="text-input" id="edit_joint_detail" placeholder="例如:右膝關節疼痛3個月 *必填" style="display: none; margin-left: 30px;">
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="脊椎問題" id="editSpineIssue">
+                                    <span>脊椎問題</span>
+                                </label>
+                                <input type="text" class="text-input" id="edit_spine_detail" placeholder="例如:腰椎輕微突出 *必填" style="display: none; margin-left: 30px;">
+                                <label class="option" style="padding: 8px 10px; margin: 0;">
+                                    <input type="checkbox" name="editDisease" value="其他" id="editOtherDisease">
+                                    <span>其他</span>
+                                </label>
+                                <input type="text" class="text-input" id="edit_other_detail" placeholder="例如:偏頭痛、鼻炎等 *必填" style="display: none; margin-left: 30px;">
+                            </div>
                         </div>
                     </div>
                     <div class="edit-field">
@@ -1139,6 +1573,8 @@
             setupPhoneInput();
             setupEmailInput();
             setupGenderInput();
+            initializeCourseOptions();
+            initializeEditOptions();
         });
 
         function initializeDateInputs() {
@@ -1360,6 +1796,115 @@
             });
         }
 
+        function initializeCourseOptions() {
+            var courseAI = document.getElementById('courseAI');
+            var courseOnly = document.getElementById('courseOnly');
+            var courseStretch = document.getElementById('courseStretch');
+            var courseAIOptions = document.getElementById('courseAIOptions');
+            var courseOnlyOptions = document.getElementById('courseOnlyOptions');
+            
+            function hideAllSubOptions() {
+                courseAIOptions.style.display = 'none';
+                courseOnlyOptions.style.display = 'none';
+                // 清除子選項選擇
+                document.querySelectorAll('input[name="courseAISub"]').forEach(function(r) { r.checked = false; });
+                document.querySelectorAll('input[name="courseOnlySub"]').forEach(function(r) { r.checked = false; });
+            }
+            
+            courseAI.addEventListener('change', function() {
+                hideAllSubOptions();
+                if (this.checked) {
+                    courseAIOptions.style.display = 'block';
+                }
+            });
+            
+            courseOnly.addEventListener('change', function() {
+                hideAllSubOptions();
+                if (this.checked) {
+                    courseOnlyOptions.style.display = 'block';
+                }
+            });
+            
+            courseStretch.addEventListener('change', function() {
+                hideAllSubOptions();
+            });
+        }
+
+        function initializeEditOptions() {
+            // 編輯區域 - 課程選擇
+            var editCourseAI = document.getElementById('editCourseAI');
+            var editCourseOnly = document.getElementById('editCourseOnly');
+            var editCourseStretch = document.getElementById('editCourseStretch');
+            var editCourseAIOptions = document.getElementById('editCourseAIOptions');
+            var editCourseOnlyOptions = document.getElementById('editCourseOnlyOptions');
+            
+            function hideAllEditSubOptions() {
+                editCourseAIOptions.style.display = 'none';
+                editCourseOnlyOptions.style.display = 'none';
+                document.querySelectorAll('input[name="editCourseAISub"]').forEach(function(r) { r.checked = false; });
+                document.querySelectorAll('input[name="editCourseOnlySub"]').forEach(function(r) { r.checked = false; });
+            }
+            
+            editCourseAI.addEventListener('change', function() {
+                hideAllEditSubOptions();
+                if (this.checked) {
+                    editCourseAIOptions.style.display = 'block';
+                }
+            });
+            
+            editCourseOnly.addEventListener('change', function() {
+                hideAllEditSubOptions();
+                if (this.checked) {
+                    editCourseOnlyOptions.style.display = 'block';
+                }
+            });
+            
+            editCourseStretch.addEventListener('change', function() {
+                hideAllEditSubOptions();
+            });
+            
+            // 編輯區域 - 運動經驗
+            var editHasExp = document.getElementById('editHasExerciseExp');
+            var editNoExp = document.getElementById('editNoExerciseExp');
+            var editExpDetail = document.getElementById('edit_exerciseExp_detail');
+            
+            editHasExp.addEventListener('change', function() {
+                if (this.checked) {
+                    editExpDetail.style.display = 'block';
+                }
+            });
+            
+            editNoExp.addEventListener('change', function() {
+                if (this.checked) {
+                    editExpDetail.style.display = 'none';
+                    editExpDetail.value = '';
+                }
+            });
+            
+            // 編輯區域 - 疾病史文字欄位
+            var editJointIssue = document.getElementById('editJointIssue');
+            var editSpineIssue = document.getElementById('editSpineIssue');
+            var editOtherDisease = document.getElementById('editOtherDisease');
+            var editJointDetail = document.getElementById('edit_joint_detail');
+            var editSpineDetail = document.getElementById('edit_spine_detail');
+            var editOtherDetail = document.getElementById('edit_other_detail');
+            
+            editJointIssue.addEventListener('change', function() {
+                editJointDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) editJointDetail.value = '';
+            });
+            
+            editSpineIssue.addEventListener('change', function() {
+                editSpineDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) editSpineDetail.value = '';
+            });
+            
+            editOtherDisease.addEventListener('change', function() {
+                editOtherDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) editOtherDetail.value = '';
+            });
+        }
+
         function setupEmailInput() {
             var emailInput = document.getElementById('email');
             var suggestionsDiv = document.getElementById('emailDomainSuggestions');
@@ -1466,6 +2011,8 @@
                 var goalsContainer = document.getElementById('edit_goals_container');
                 var courseDisplay = document.getElementById('edit_course_display');
                 var courseContainer = document.getElementById('edit_course_container');
+                var exerciseExpDisplay = document.getElementById('edit_exerciseExp_display');
+                var exerciseExpContainer = document.getElementById('edit_exerciseExp_container');
                 var diseasesDisplay = document.getElementById('edit_diseases_display');
                 var diseasesContainer = document.getElementById('edit_diseases_container');
                 var remarksTextarea = document.getElementById('edit_remarks');
@@ -1475,58 +2022,153 @@
                     goalsContainer.style.display = 'block';
                     courseDisplay.style.display = 'none';
                     courseContainer.style.display = 'block';
+                    exerciseExpDisplay.style.display = 'none';
+                    exerciseExpContainer.style.display = 'block';
                     diseasesDisplay.style.display = 'none';
                     diseasesContainer.style.display = 'block';
                     remarksTextarea.disabled = false;
                     button.textContent = '保存';
                 } else {
+                    // 驗證健身目標
                     var goalsSelect = document.getElementById('edit_goals');
-                    var courseSelect = document.getElementById('edit_course');
-                    var diseasesSelect = document.getElementById('edit_diseases');
-                    var diseasesDetail = document.getElementById('edit_diseases_detail').value.trim();
                     var selectedGoals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
-                    var selectedCourses = Array.from(courseSelect.selectedOptions).map(function(opt) { return opt.value; });
-                    var selectedDiseases = Array.from(diseasesSelect.selectedOptions).map(function(opt) { return opt.value; });
-                    
                     if (selectedGoals.length === 0) {
                         alert('請至少選擇一項健身目標');
                         editingSections[section] = true;
                         return;
                     }
                     
-                    if (selectedCourses.length === 0) {
-                        alert('請至少選擇一項課程偏好');
+                    // 驗證預約體驗課程
+                    var courseChecked = document.querySelector('input[name="editCourse"]:checked');
+                    if (!courseChecked) {
+                        alert('請選擇預約體驗課程');
                         editingSections[section] = true;
                         return;
                     }
+                    if (courseChecked.value === 'AI 3D體態檢測') {
+                        if (!document.querySelector('input[name="editCourseAISub"]:checked')) {
+                            alert('請選擇體驗課程類型（重訓或皮拉提斯）');
+                            editingSections[section] = true;
+                            return;
+                        }
+                    }
+                    if (courseChecked.value === '不檢測僅體驗運動課程') {
+                        if (!document.querySelector('input[name="editCourseOnlySub"]:checked')) {
+                            alert('請選擇體驗課程類型（重訓或皮拉提斯）');
+                            editingSections[section] = true;
+                            return;
+                        }
+                    }
                     
+                    // 驗證運動經驗
+                    var exerciseExpChecked = document.querySelector('input[name="editExerciseExp"]:checked');
+                    if (!exerciseExpChecked) {
+                        alert('請選擇是否有運動經驗');
+                        editingSections[section] = true;
+                        return;
+                    }
+                    if (exerciseExpChecked.value === '有') {
+                        var expDetail = document.getElementById('edit_exerciseExp_detail').value.trim();
+                        if (!expDetail) {
+                            alert('請說明您的運動經驗');
+                            editingSections[section] = true;
+                            return;
+                        }
+                    }
+                    
+                    // 驗證疾病史
+                    var selectedDiseases = Array.from(document.querySelectorAll('input[name="editDisease"]:checked')).map(function(cb) { return cb.value; });
                     if (selectedDiseases.length === 0) {
                         alert('請至少選擇一項疾病史選項');
                         editingSections[section] = true;
                         return;
                     }
                     
-                    formData.goals = selectedGoals;
-                    formData.courses = selectedCourses;
-                    formData.remarks = remarksTextarea.value;
-                    
-                    // 處理疾病史，如果有詳細說明則附加
-                    formData.diseases = selectedDiseases.slice();
-                    if (diseasesDetail) {
-                        formData.diseases.push('補充說明: ' + diseasesDetail);
+                    // 驗證疾病史文字欄位
+                    if (selectedDiseases.includes('關節問題')) {
+                        var jointDetail = document.getElementById('edit_joint_detail').value.trim();
+                        if (!jointDetail) {
+                            alert('請說明關節問題的詳細情況');
+                            editingSections[section] = true;
+                            return;
+                        }
+                    }
+                    if (selectedDiseases.includes('脊椎問題')) {
+                        var spineDetail = document.getElementById('edit_spine_detail').value.trim();
+                        if (!spineDetail) {
+                            alert('請說明脊椎問題的詳細情況');
+                            editingSections[section] = true;
+                            return;
+                        }
+                    }
+                    if (selectedDiseases.includes('其他')) {
+                        var otherDetail = document.getElementById('edit_other_detail').value.trim();
+                        if (!otherDetail) {
+                            alert('請說明其他疾病的詳細情況');
+                            editingSections[section] = true;
+                            return;
+                        }
                     }
                     
+                    // 保存健身目標
+                    formData.goals = selectedGoals;
+                    
+                    // 保存預約體驗課程
+                    var courseValue = courseChecked.value;
+                    if (courseValue === 'AI 3D體態檢測') {
+                        var subChecked = document.querySelector('input[name="editCourseAISub"]:checked');
+                        formData.courses = 'AI 3D體態檢測($1500) + ' + (subChecked ? subChecked.value : '');
+                    } else if (courseValue === '不檢測僅體驗運動課程') {
+                        var subChecked = document.querySelector('input[name="editCourseOnlySub"]:checked');
+                        formData.courses = subChecked ? subChecked.value : courseValue;
+                    } else {
+                        formData.courses = courseValue;
+                    }
+                    
+                    // 保存運動經驗
+                    if (exerciseExpChecked.value === '有') {
+                        var expDetail = document.getElementById('edit_exerciseExp_detail').value.trim();
+                        formData.exerciseExp = expDetail ? '有: ' + expDetail : '有';
+                    } else {
+                        formData.exerciseExp = '無';
+                    }
+                    
+                    // 保存疾病史
+                    formData.diseases = [];
+                    selectedDiseases.forEach(function(disease) {
+                        if (disease === '關節問題') {
+                            var detail = document.getElementById('edit_joint_detail').value.trim();
+                            formData.diseases.push(detail ? '關節問題: ' + detail : '關節問題');
+                        } else if (disease === '脊椎問題') {
+                            var detail = document.getElementById('edit_spine_detail').value.trim();
+                            formData.diseases.push(detail ? '脊椎問題: ' + detail : '脊椎問題');
+                        } else if (disease === '其他') {
+                            var detail = document.getElementById('edit_other_detail').value.trim();
+                            formData.diseases.push(detail ? '其他: ' + detail : '其他');
+                        } else {
+                            formData.diseases.push(disease);
+                        }
+                    });
+                    
+                    // 保存備註
+                    formData.remarks = remarksTextarea.value;
+                    
+                    // 隱藏編輯區域
                     goalsDisplay.style.display = 'block';
                     goalsContainer.style.display = 'none';
                     courseDisplay.style.display = 'block';
                     courseContainer.style.display = 'none';
+                    exerciseExpDisplay.style.display = 'block';
+                    exerciseExpContainer.style.display = 'none';
                     diseasesDisplay.style.display = 'block';
                     diseasesContainer.style.display = 'none';
                     remarksTextarea.disabled = true;
                     button.textContent = '修改';
                     
+                    // 更新顯示
                     document.getElementById('edit_goals_display').textContent = selectedGoals.join('、');
-                    document.getElementById('edit_course_display').textContent = selectedCourses.join('、');
+                    document.getElementById('edit_course_display').textContent = formData.courses;
+                    document.getElementById('edit_exerciseExp_display').textContent = formData.exerciseExp;
                     document.getElementById('edit_diseases_display').textContent = formData.diseases.join('、');
                 }
             }
@@ -1559,6 +2201,12 @@
             saveCurrentPageData();
             saveFormDataToStorage();
             
+            // 離開頁面 2 時暫停影片
+            if (currentPage === 2) {
+                var video = document.getElementById('courseVideo');
+                if (video) video.pause();
+            }
+            
             if (currentPage === 7) {
                 displayReviewData();
             }
@@ -1568,6 +2216,13 @@
             });
             
             currentPage++;
+            
+            // 進入頁面 2 時播放影片
+            if (currentPage === 2) {
+                var video = document.getElementById('courseVideo');
+                if (video) video.play();
+            }
+            
             var nextPageElement = document.querySelector('[data-page="' + currentPage + '"]');
             if (nextPageElement) {
                 nextPageElement.classList.add('active');
@@ -1577,11 +2232,23 @@
         }
 
         function prevPage() {
+            // 離開頁面 2 時暫停影片
+            if (currentPage === 2) {
+                var video = document.getElementById('courseVideo');
+                if (video) video.pause();
+            }
+            
             document.querySelectorAll('.question-page').forEach(function(page) {
                 page.classList.remove('active');
             });
             
             currentPage--;
+            
+            // 回到頁面 2 時播放影片
+            if (currentPage === 2) {
+                var video = document.getElementById('courseVideo');
+                if (video) video.play();
+            }
             
             var prevPageElement = document.querySelector('[data-page="' + currentPage + '"]');
             if (prevPageElement) {
@@ -1603,10 +2270,34 @@
             }
             
             if (currentPage === 2) {
-                if (document.querySelectorAll('input[name="course"]:checked').length === 0) {
-                    document.getElementById('courseError').style.display = 'block';
-                    alert('⚠️ 請至少選擇一項課程類型');
+                var courseChecked = document.querySelector('input[name="course"]:checked');
+                var courseError = document.getElementById('courseError');
+                
+                if (!courseChecked) {
+                    courseError.textContent = '請選擇一項體驗課程';
+                    courseError.style.display = 'block';
+                    alert('⚠️ 請選擇一項體驗課程');
                     return false;
+                }
+                
+                // 檢查 AI 3D體態檢測的子選項
+                if (courseChecked.value === 'AI 3D體態檢測') {
+                    if (!document.querySelector('input[name="courseAISub"]:checked')) {
+                        courseError.textContent = '請選擇體驗課程類型（重訓或皮拉提斯）';
+                        courseError.style.display = 'block';
+                        alert('⚠️ 請選擇體驗課程類型（重訓或皮拉提斯）');
+                        return false;
+                    }
+                }
+                
+                // 檢查不檢測僅體驗運動課程的子選項
+                if (courseChecked.value === '不檢測僅體驗運動課程') {
+                    if (!document.querySelector('input[name="courseOnlySub"]:checked')) {
+                        courseError.textContent = '請選擇體驗課程類型（重訓或皮拉提斯）';
+                        courseError.style.display = 'block';
+                        alert('⚠️ 請選擇體驗課程類型（重訓或皮拉提斯）');
+                        return false;
+                    }
                 }
             }
             
@@ -1632,10 +2323,49 @@
             }
             
             if (currentPage === 4) {
+                var diseaseError = document.getElementById('diseaseError');
+                
                 if (document.querySelectorAll('input[name="disease"]:checked').length === 0) {
-                    document.getElementById('diseaseError').style.display = 'block';
+                    diseaseError.textContent = '請至少選擇一項疾病史選項';
+                    diseaseError.style.display = 'block';
                     alert('⚠️ 請至少選擇一項疾病史選項');
                     return false;
+                }
+                
+                // 檢查關節問題文字欄位
+                var jointIssue = document.getElementById('jointIssue');
+                if (jointIssue.checked) {
+                    var jointDetail = document.getElementById('jointDetail').value.trim();
+                    if (!jointDetail) {
+                        diseaseError.textContent = '請說明關節問題的詳細情況';
+                        diseaseError.style.display = 'block';
+                        alert('⚠️ 請說明關節問題的詳細情況');
+                        return false;
+                    }
+                }
+                
+                // 檢查脊椎問題文字欄位
+                var spineIssue = document.getElementById('spineIssue');
+                if (spineIssue.checked) {
+                    var spineDetail = document.getElementById('spineDetail').value.trim();
+                    if (!spineDetail) {
+                        diseaseError.textContent = '請說明脊椎問題的詳細情況';
+                        diseaseError.style.display = 'block';
+                        alert('⚠️ 請說明脊椎問題的詳細情況');
+                        return false;
+                    }
+                }
+                
+                // 檢查其他文字欄位
+                var otherDisease = document.getElementById('otherDisease');
+                if (otherDisease.checked) {
+                    var otherDetail = document.getElementById('otherDetail').value.trim();
+                    if (!otherDetail) {
+                        diseaseError.textContent = '請說明其他疾病的詳細情況';
+                        diseaseError.style.display = 'block';
+                        alert('⚠️ 請說明其他疾病的詳細情況');
+                        return false;
+                    }
                 }
             }
             
@@ -1658,6 +2388,38 @@
                 if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
             }
             
+            if (currentPage === 7) {
+                var timeSlotError = document.getElementById('timeSlotError');
+                var timeSlots = [
+                    { checkbox: 'weekdayDay', input: 'weekdayDayTime', name: '平日白天' },
+                    { checkbox: 'weekdayNight', input: 'weekdayNightTime', name: '平日晚上' },
+                    { checkbox: 'weekendDay', input: 'weekendDayTime', name: '假日白天' },
+                    { checkbox: 'weekendNight', input: 'weekendNightTime', name: '假日晚上' }
+                ];
+                
+                // 檢查是否至少勾選一個時段
+                var anyChecked = document.querySelectorAll('input[name="timeSlot"]:checked').length > 0;
+                if (!anyChecked) {
+                    timeSlotError.textContent = '請至少選擇一個上課時段';
+                    timeSlotError.style.display = 'block';
+                    alert('⚠️ 請至少選擇一個上課時段');
+                    return false;
+                }
+                
+                for (var i = 0; i < timeSlots.length; i++) {
+                    var slot = timeSlots[i];
+                    var checkbox = document.getElementById(slot.checkbox);
+                    var timeInput = document.getElementById(slot.input);
+                    
+                    if (checkbox.checked && !timeInput.value.trim()) {
+                        timeSlotError.textContent = '請填寫' + slot.name + '的時段範圍';
+                        timeSlotError.style.display = 'block';
+                        alert('⚠️ 請填寫' + slot.name + '的時段範圍');
+                        return false;
+                    }
+                }
+            }
+            
             return true;
         }
 
@@ -1666,7 +2428,20 @@
                 formData.goals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(function(cb) { return cb.value; });
             }
             if (currentPage === 2) {
-                formData.courses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(function(cb) { return cb.value; });
+                var courseChecked = document.querySelector('input[name="course"]:checked');
+                if (courseChecked) {
+                    var courseValue = courseChecked.value;
+                    
+                    if (courseValue === 'AI 3D體態檢測') {
+                        var subChecked = document.querySelector('input[name="courseAISub"]:checked');
+                        formData.courses = 'AI 3D體態檢測($1500) + ' + (subChecked ? subChecked.value : '');
+                    } else if (courseValue === '不檢測僅體驗運動課程') {
+                        var subChecked = document.querySelector('input[name="courseOnlySub"]:checked');
+                        formData.courses = subChecked ? subChecked.value : courseValue;
+                    } else {
+                        formData.courses = courseValue;
+                    }
+                }
             }
             if (currentPage === 3) {
                 var exerciseExpChecked = document.querySelector('input[name="exerciseExp"]:checked');
@@ -1762,23 +2537,69 @@
                 option.selected = (formData.goals || []).includes(option.value);
             });
             
-            var courseSelect = document.getElementById('edit_course');
-            Array.from(courseSelect.options).forEach(function(option) {
-                option.selected = (formData.courses || []).includes(option.value);
-            });
+            // 預選課程選項
+            var coursesValue = formData.courses || '';
+            if (coursesValue.includes('AI 3D體態檢測')) {
+                document.getElementById('editCourseAI').checked = true;
+                document.getElementById('editCourseAIOptions').style.display = 'block';
+                if (coursesValue.includes('重訓')) {
+                    var subRadio = document.querySelector('input[name="editCourseAISub"][value="重訓(45分鐘)"]');
+                    if (subRadio) subRadio.checked = true;
+                } else if (coursesValue.includes('皮拉提斯')) {
+                    var subRadio = document.querySelector('input[name="editCourseAISub"][value="皮拉提斯(45分鐘)"]');
+                    if (subRadio) subRadio.checked = true;
+                }
+            } else if (coursesValue.includes('重訓') && coursesValue.includes('$500')) {
+                document.getElementById('editCourseOnly').checked = true;
+                document.getElementById('editCourseOnlyOptions').style.display = 'block';
+                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="重訓(45分鐘/$500)"]');
+                if (subRadio) subRadio.checked = true;
+            } else if (coursesValue.includes('皮拉提斯') && coursesValue.includes('$800')) {
+                document.getElementById('editCourseOnly').checked = true;
+                document.getElementById('editCourseOnlyOptions').style.display = 'block';
+                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="皮拉提斯(45分鐘/$800)"]');
+                if (subRadio) subRadio.checked = true;
+            } else if (coursesValue.includes('肌肉賦能伸展')) {
+                document.getElementById('editCourseStretch').checked = true;
+            }
+            
+            // 預選運動經驗選項
+            var exerciseExpValue = formData.exerciseExp || '';
+            if (exerciseExpValue.startsWith('有')) {
+                document.getElementById('editHasExerciseExp').checked = true;
+                document.getElementById('edit_exerciseExp_detail').style.display = 'block';
+                if (exerciseExpValue.includes(':')) {
+                    document.getElementById('edit_exerciseExp_detail').value = exerciseExpValue.split(':')[1].trim();
+                }
+            } else if (exerciseExpValue === '無') {
+                document.getElementById('editNoExerciseExp').checked = true;
+            }
             
             // 預選疾病史選項
-            var diseasesSelect = document.getElementById('edit_diseases');
             var diseaseValues = (formData.diseases || []).map(function(d) {
                 // 移除詳細說明部分，只保留選項名稱
                 return d.split(':')[0].trim();
             });
-            Array.from(diseasesSelect.options).forEach(function(option) {
-                option.selected = diseaseValues.includes(option.value);
+            document.querySelectorAll('input[name="editDisease"]').forEach(function(checkbox) {
+                checkbox.checked = diseaseValues.includes(checkbox.value);
+            });
+            
+            // 預填疾病史文字欄位
+            (formData.diseases || []).forEach(function(d) {
+                if (d.startsWith('關節問題:')) {
+                    document.getElementById('edit_joint_detail').value = d.split(':')[1].trim();
+                    document.getElementById('edit_joint_detail').style.display = 'block';
+                } else if (d.startsWith('脊椎問題:')) {
+                    document.getElementById('edit_spine_detail').value = d.split(':')[1].trim();
+                    document.getElementById('edit_spine_detail').style.display = 'block';
+                } else if (d.startsWith('其他:')) {
+                    document.getElementById('edit_other_detail').value = d.split(':')[1].trim();
+                    document.getElementById('edit_other_detail').style.display = 'block';
+                }
             });
             
             document.getElementById('edit_goals_display').textContent = (formData.goals || []).join('、') || '未填寫';
-            document.getElementById('edit_course_display').textContent = (formData.courses || []).join('、') || '未填寫';
+            document.getElementById('edit_course_display').textContent = formData.courses || '未填寫';
             document.getElementById('edit_exerciseExp_display').textContent = formData.exerciseExp || '未填寫';
             document.getElementById('edit_diseases_display').textContent = (formData.diseases || []).join('、') || '未填寫';
             
@@ -1805,9 +2626,6 @@
             
             var goalsSelect = document.getElementById('edit_goals');
             formData.goals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
-            
-            var courseSelect = document.getElementById('edit_course');
-            formData.courses = Array.from(courseSelect.selectedOptions).map(function(opt) { return opt.value; });
             
             formData.remarks = document.getElementById('edit_remarks').value;
             
@@ -1843,7 +2661,7 @@
                 email: formData.email || '',
                 phone: formData.phone || '',
                 goals: (formData.goals || []).join('、'),
-                courses: (formData.courses || []).join('、'),
+                courses: formData.courses || '',
                 exerciseExp: formData.exerciseExp || '',
                 diseases: (formData.diseases || []).join('、'),
                 remarks: formData.remarks || '',
