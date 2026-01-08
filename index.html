@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>健身體驗問卷</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #e2ede6 0%, #daedec 100%);
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+            touch-action: pan-y;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 14px;
+            background: 
+                radial-gradient(ellipse at top, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+                linear-gradient(135deg, 
+                    #f8fcfa 0%, 
+                    #f2f9f6 15%,
+                    #ecf7f2 30%,
+                    #e8f5f1 45%, 
+                    #e2ede6 60%, 
+                    #d8e9de 75%,
+                    #d0e5d9 90%,
+                    #cce3d8 100%);
+            position: relative;
+            overflow: visible;
+            border-radius: 25px;
+            box-shadow: 
+                inset 0 4px 8px rgba(95, 132, 111, 0.06),
+                inset 0 2px 4px rgba(95, 132, 111, 0.1),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.5),
+                0 2px 6px rgba(255, 255, 255, 0.95),
+                0 4px 12px rgba(122, 193, 154, 0.04);
+            padding: 3px;
+            background-clip: padding-box;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(255, 255, 255, 0.5) 0%, 
+                    rgba(255, 255, 255, 0.2) 25%,
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.02) 75%,
+                    rgba(0, 0, 0, 0.04) 100%),
+                linear-gradient(135deg, 
+                    #2d7a4d 0%, #3d8c5f 8%, #4a9d6f 16%, #58b07e 24%,
+                    #6fc99b 32%, #7ac19a 40%, #87c9a5 48%, #95d1b5 56%,
+                    #a5d8c5 64%, #aad9d9 72%, #b3dedd 80%, #bde3e3 88%,
+                    #c8e8e9 96%, #d0ecee 100%);
+            position: relative;
+            transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 
+                0 0 30px rgba(122, 193, 154, 0.6),
+                0 0 50px rgba(122, 193, 154, 0.35),
+                0 3px 12px rgba(95, 132, 111, 0.35),
+                inset 0 2px 1px rgba(255, 255, 255, 0.7),
+                inset 0 -2px 1px rgba(0, 0, 0, 0.08);
+            border-radius: 22px;
+            overflow: hidden;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .question-page {
+            display: none;
+        }
+
+        .question-page.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #5f846f;
+            font-size: 22px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .subtitle {
+            color: #808080;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+            max-width: 100%;
+        }
+
+        .option {
+            background: #fff5f5;
+            border: 2px solid #ffe8e8;
+            border-radius: 12px;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 100%;
+            word-wrap: break-word;
+            min-height: 52px;
+        }
+
+        .option:active { transform: scale(0.98); }
+
+        .option:hover {
+            background: #ffeaea;
+            border-color: #ffd5d5;
+            transform: translateX(3px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #c8e6d7 0%, #e8f5f0 100%);
+            border-color: #7ac19a;
+            color: #2d5a3d;
+            box-shadow: 0 4px 15px rgba(122, 193, 154, 0.5);
+            font-weight: 600;
+        }
+
+        .detail-input {
+            margin-top: 12px;
+            background: #fffafa !important;
+            border-color: #ffe8e8 !important;
+            font-size: 14px;
+            color: #4a6859;
+        }
+
+        .detail-input::placeholder { color: #a89a9a; opacity: 0.7; }
+
+        .detail-input:focus {
+            border-color: #c0ddd0 !important;
+            box-shadow: 0 0 0 4px rgba(212, 235, 224, 0.15) !important;
+            background: #ffffff !important;
+        }
+
+        .option input[type="checkbox"],
+        .option input[type="radio"] {
+            width: 22px; height: 22px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: #5f846f;
+        }
+
+        .option.selected input[type="checkbox"],
+        .option.selected input[type="radio"] {
+            accent-color: #2d5a3d;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2ede6;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: border-color 0.2s;
+            max-width: 100%;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #7ac19a;
+            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+        }
+
+        .text-input:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #7ac19a 0%, #9fcccc 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 35px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
+            min-height: 52px;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .button:active::before { width: 300px; height: 300px; }
+        .button:active { transform: scale(0.98); }
+        .button:disabled { background: #808080; cursor: not-allowed; transform: none; }
+
+        .button.secondary {
+            background: #ffffff;
+            color: #7ac19a;
+            border: 2px solid #7ac19a;
+        }
+
+        .button.warning {
+            background: linear-gradient(135deg, #f2ac98 0%, #c67566 100%);
+            color: #ffffff;
+        }
+
+        .error-message {
+            color: #c67566;
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 10px;
+            background: #fff5f5;
+            border-radius: 6px;
+            border-left: 3px solid #c67566;
+        }
+
+        .required { color: #f2ac98; }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2ede6;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #7ac19a;
+            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+        }
+
+        .editable-section {
+            background: #ffffff;
+            border: 2px solid #e2ede6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .editable-section h3 {
+            color: #5f846f;
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: #7ac19a;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            min-height: 36px;
+        }
+
+        .edit-button:active {
+            background: #5f846f;
+            transform: scale(0.95);
+        }
+
+        .edit-field { margin-bottom: 12px; }
+
+        .edit-field label {
+            display: block;
+            color: #5f846f;
+            font-size: 14px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .edit-field input,
+        .edit-field select,
+        .edit-field textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2ede6;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .edit-field input:focus,
+        .edit-field select:focus,
+        .edit-field textarea:focus {
+            outline: none;
+            border-color: #7ac19a;
+            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+        }
+
+        .basic-info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .basic-info-grid .full-width { grid-column: 1 / -1; }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-buttons .button { flex: 1; }
+
+        .nav-buttons-three {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-buttons-three .button-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-buttons-three .button-row .button { flex: 1; }
+
+        .email-domain-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .email-domain-item:last-child { border-bottom: none; }
+        .email-domain-item:active { background: #e2ede6; }
+
+        .completion-modern {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .completion-icon-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .completion-icon-bg {
+            width: 120px; height: 120px;
+            background: linear-gradient(135deg, #7ac19a 0%, #9fcccc 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(122, 193, 154, 0.3);
+            animation: success-pop 0.6s ease-out;
+        }
+
+        @keyframes success-pop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .completion-icon-bg::before {
+            content: '';
+            position: absolute;
+            width: 140px; height: 140px;
+            border: 3px solid #7ac19a;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        .completion-icon {
+            font-size: 60px;
+            color: #ffffff;
+        }
+
+        .completion-title {
+            color: #5f846f;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            animation: fade-in-up 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .completion-subtitle {
+            color: #66888e;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            animation: fade-in-up 0.6s ease-out 0.3s both;
+        }
+
+        .completion-info-cards {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: fade-in-up 0.6s ease-out 0.4s both;
+        }
+
+        .completion-info-card {
+            background: linear-gradient(135deg, #e2ede6 0%, #daedec 100%);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #7ac19a;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .completion-info-card:active { transform: scale(0.98); }
+
+        .completion-info-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .completion-info-title {
+            color: #5f846f;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .completion-info-text {
+            color: #66888e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .completion-reminder {
+            background: #fcf4e3;
+            border: 2px solid #ffe08b;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            animation: fade-in-up 0.6s ease-out 0.5s both;
+        }
+
+        .completion-reminder-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ba9e60;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .completion-reminder-text {
+            color: #66888e;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        .completion-book-button {
+            margin-top: 25px;
+            animation: fade-in-up 0.6s ease-out 0.6s both;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px; height: 50px;
+            border: 4px solid #e2ede6;
+            border-top-color: #7ac19a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: #5f846f;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .content { padding: 25px 18px; }
+            h2 { font-size: 20px; }
+            .button { font-size: 16px; padding: 14px 30px; }
+            .option { padding: 12px 14px; font-size: 15px; }
+            .completion-icon-bg { width: 100px; height: 100px; }
+            .completion-icon { font-size: 50px; }
+            .completion-title { font-size: 22px; }
+            .completion-info-icon { font-size: 28px; }
+            #birthdayYear, #birthdayMonth, #birthdayDay {
+                font-size: 16px !important;
+                padding: 14px 12px !important;
+                min-height: 50px !important;
+            }
+            #venueRules { padding: 15px !important; font-size: 14px !important; }
+            #venueRules h3 { font-size: 16px !important; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 載入中畫面 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">載入中...</div>
+    </div>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="content">
+            <!-- Q1: 健身目標 -->
+            <div class="question-page active" data-page="1">
+                <h2>您的健身目標是什麼?<span class="required">*必填</span></h2>
+                <p class="subtitle">可複選多個目標</p>
+                <div class="option-group">
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="減脂">
+                        <span>減脂</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="增肌">
+                        <span>增肌</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="改善體態">
+                        <span>改善體態</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="改善痠痛/調整姿勢">
+                        <span>改善痠痛 / 調整姿勢</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="術後/產後恢復">
+                        <span>術後 / 產後恢復</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="日常健康維持">
+                        <span>日常健康維持</span>
+                    </label>
+                </div>
+                <div id="goalError" class="error-message" style="display: none;">請至少選擇一項健身目標</div>
+                <button class="button" onclick="nextPage()">下一步</button>
+            </div>
+
+            <!-- Q2: 課程偏好 -->
+            <div class="question-page" data-page="2">
+                <h2>您偏好的課程類型?<span class="required">*必填</span></h2>
+                <p class="subtitle">可複選多個課程</p>
+                <div class="option-group">
+                    <label class="option">
+                        <input type="checkbox" name="course" value="重量訓練">
+                        <span>重量訓練</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="course" value="器械皮拉提斯">
+                        <span>器械皮拉提斯</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="course" value="伸展課程">
+                        <span>伸展課程</span>
+                    </label>
+                </div>
+                <div id="courseError" class="error-message" style="display: none;">請至少選擇一項課程類型</div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q3: 疾病史 -->
+            <div class="question-page" data-page="3">
+                <h2>疾病史 <span class="required">*必填</span></h2>
+                <p class="subtitle">請選擇所有與您健康史相關的疾病項目</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px;">
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="心臟病">
+                        <span>心臟病</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="心絞痛">
+                        <span>心絞痛</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="糖尿病">
+                        <span>糖尿病</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="疝氣/脫腸">
+                        <span>疝氣/脫腸</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="高血壓">
+                        <span>高血壓</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="氣喘">
+                        <span>氣喘</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="貧血">
+                        <span>貧血</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="癲癇">
+                        <span>癲癇</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="甲狀腺問題">
+                        <span>甲狀腺問題</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="靜脈瘤">
+                        <span>靜脈瘤</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="惡性腫瘤">
+                        <span>惡性腫瘤</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="椎間盤突出">
+                        <span>椎間盤突出</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="習慣性脫臼">
+                        <span>習慣性脫臼</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="脊椎滑脫">
+                        <span>脊椎滑脫</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="骨質疏鬆症">
+                        <span>骨質疏鬆症</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="痛風/風濕">
+                        <span>痛風/風濕</span>
+                    </label>
+                </div>
+
+                <div class="option-group">
+                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="checkbox" name="disease" value="關節問題" id="jointIssue">
+                            <span>關節問題</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="jointDetail" placeholder="例如:右膝關節疼痛3個月" style="display: none; width: 100%;">
+                    </label>
+                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="checkbox" name="disease" value="脊椎問題" id="spineIssue">
+                            <span>脊椎問題</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="spineDetail" placeholder="例如:腰椎輕微突出" style="display: none; width: 100%;">
+                    </label>
+                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="checkbox" name="disease" value="其他" id="otherDisease">
+                            <span>其他</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="otherDetail" placeholder="例如:偏頭痛、鼻炎等" style="display: none; width: 100%;">
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="disease" value="無" id="noDisease">
+                        <span>無</span>
+                    </label>
+                </div>
+                <div id="diseaseError" class="error-message" style="display: none;">請至少選擇一項</div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q4: 備註 -->
+            <div class="question-page" data-page="4">
+                <h2>備註</h2>
+                <p class="subtitle">其他想告訴我們的資訊</p>
+                <textarea class="text-input" id="remarks" rows="6" placeholder="疾病或受傷史、時間長度、生活習慣、醫生建議"></textarea>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q5: 基本資料 -->
+            <div class="question-page" data-page="5">
+                <h2>基本資料 <span class="required">*必填</span></h2>
+                <p class="subtitle">請填寫您的基本資料</p>
+                
+                <div class="basic-info-grid">
+                    <div class="edit-field full-width">
+                        <label>姓名 <span class="required">*</span></label>
+                        <input type="text" id="name" class="text-input" placeholder="請輸入您的姓名">
+                    </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>生日 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 8px;">
+                            <select id="birthdayYear" class="text-input" style="flex: 1;">
+                                <option value="">年</option>
+                            </select>
+                            <select id="birthdayMonth" class="text-input" style="flex: 1;">
+                                <option value="">月</option>
+                            </select>
+                            <select id="birthdayDay" class="text-input" style="flex: 1;">
+                                <option value="">日</option>
+                            </select>
+                        </div>
+                        <input type="date" id="birthday" style="display: none;">
+                    </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>性別 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 10px;">
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="genderSelect" value="男">
+                                <span>男</span>
+                            </label>
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="genderSelect" value="女">
+                                <span>女</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>電子信箱 <span class="required">*</span></label>
+                        <div style="position: relative;">
+                            <input type="email" id="email" class="text-input" placeholder="example@gmail.com">
+                            <div id="emailDomainSuggestions" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e2ede6; border-top: none; border-radius: 0 0 8px 8px; z-index: 10; max-height: 200px; overflow-y: auto;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>電話 <span class="required">*</span></label>
+                        <input type="tel" id="phone" class="text-input" placeholder="09xxxxxxxx" maxlength="10">
+                    </div>
+                </div>
+                
+                <div id="basicInfoError" class="error-message" style="display: none;"></div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q6: 上課時段 -->
+            <div class="question-page" data-page="6">
+                <h2>方便固定上課時段區間</h2>
+                <p class="subtitle">💡 我們會盡可能依照您的時間需求安排,時段範圍可超過範例時間</p>
+                <div class="option-group">
+                    <label class="option">
+                        <input type="checkbox" name="timeSlot" value="平日白天" id="weekdayDay">
+                        <span>平日白天</span>
+                    </label>
+                    <input type="text" class="text-input" id="weekdayDayTime" placeholder="例:09:00-17:00 *必填" style="display: none; margin-top: -5px;">
+                    
+                    <label class="option">
+                        <input type="checkbox" name="timeSlot" value="平日晚上(尖峰)" id="weekdayNight">
+                        <span>平日晚上(尖峰)</span>
+                    </label>
+                    <input type="text" class="text-input" id="weekdayNightTime" placeholder="例:18:00-21:00 *必填" style="display: none; margin-top: -5px;">
+                    
+                    <label class="option">
+                        <input type="checkbox" name="timeSlot" value="假日白天(尖峰)" id="weekendDay">
+                        <span>假日白天(尖峰)</span>
+                    </label>
+                    <input type="text" class="text-input" id="weekendDayTime" placeholder="例:09:00-17:00 *必填" style="display: none; margin-top: -5px;">
+                    
+                    <label class="option">
+                        <input type="checkbox" name="timeSlot" value="假日晚上" id="weekendNight">
+                        <span>假日晚上</span>
+                    </label>
+                    <input type="text" class="text-input" id="weekendNightTime" placeholder="例:18:00-21:00 *必填" style="display: none; margin-top: -5px;">
+                    
+                    <label class="option">
+                        <input type="checkbox" name="timeSlot" value="彈性不固定">
+                        <span>彈性不固定</span>
+                    </label>
+                </div>
+                <div id="timeSlotError" class="error-message" style="display: none;"></div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q7: 資料確認 -->
+            <div class="question-page" data-page="7">
+                <h2>資料確認</h2>
+                <p class="subtitle">請確認所有資料正確,點擊「修改」按鈕可編輯</p>
+                
+                <div class="editable-section">
+                    <button class="edit-button" onclick="toggleEdit('basic')">修改</button>
+                    <h3>基本資料</h3>
+                    <div class="edit-field">
+                        <label>姓名 <span class="required">*</span></label>
+                        <input type="text" id="edit_name" class="text-input" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>生日 <span class="required">*</span></label>
+                        <input type="date" id="edit_birthday" class="text-input" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>性別 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 10px;">
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="editGenderSelect" value="男" disabled>
+                                <span>男</span>
+                            </label>
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="editGenderSelect" value="女" disabled>
+                                <span>女</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="edit-field">
+                        <label>電子信箱 <span class="required">*</span></label>
+                        <input type="email" id="edit_email" class="text-input" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>電話 <span class="required">*</span></label>
+                        <input type="tel" id="edit_phone" class="text-input" maxlength="10" disabled>
+                    </div>
+                </div>
+
+                <div class="editable-section">
+                    <button class="edit-button" onclick="toggleEdit('fitness')">修改</button>
+                    <h3>健身資訊</h3>
+                    <div class="edit-field">
+                        <label>健身目標</label>
+                        <div id="edit_goals_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
+                        <div id="edit_goals_container" style="display: none;">
+                            <select id="edit_goals" class="text-input" multiple size="6" style="height: auto;">
+                                <option value="減脂">減脂</option>
+                                <option value="增肌">增肌</option>
+                                <option value="改善體態">改善體態</option>
+                                <option value="改善痠痛/調整姿勢">改善痠痛/調整姿勢</option>
+                                <option value="術後/產後恢復">術後/產後恢復</option>
+                                <option value="日常健康維持">日常健康維持</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit-field">
+                        <label>課程偏好</label>
+                        <div id="edit_course_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
+                        <div id="edit_course_container" style="display: none;">
+                            <select id="edit_course" class="text-input" multiple size="3" style="height: auto;">
+                                <option value="重量訓練">重量訓練</option>
+                                <option value="器械皮拉提斯">器械皮拉提斯</option>
+                                <option value="伸展課程">伸展課程</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="edit-field">
+                        <label>疾病史</label>
+                        <div id="edit_diseases_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
+                    </div>
+                    <div class="edit-field">
+                        <label>備註</label>
+                        <textarea id="edit_remarks" class="text-input" rows="3" disabled></textarea>
+                    </div>
+                </div>
+
+                <div class="editable-section">
+                    <h3>上課時段偏好</h3>
+                    <div id="edit_time_preferences"></div>
+                </div>
+
+                <div id="editError" class="error-message" style="display: none;"></div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="saveEditedData()">確認無誤,繼續</button>
+                </div>
+            </div>
+
+            <!-- Q8: 場館規範 -->
+            <div class="question-page" data-page="8">
+                <h2>場館規範同意書</h2>
+                <p class="subtitle">請詳閱場館規範並同意後才能完成預約</p>
+                <div style="background: #ffffff; border: 2px solid #ffe8e8; border-radius: 12px; padding: 20px; margin-bottom: 20px; max-height: 500px; overflow-y: auto;" id="venueRules">
+                    載入中...
+                </div>
+                <label style="display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: #f5f5f5; border-radius: 8px; cursor: not-allowed; margin-bottom: 20px; opacity: 0.6;" id="agreeRulesLabel">
+                    <input type="checkbox" id="agreeRules" style="margin-top: 3px; min-width: 20px; min-height: 20px; accent-color: #2d5a3d;" disabled>
+                    <span>我已詳閱並同意遵守以上場館規範</span>
+                </label>
+                <div id="rulesError" class="error-message" style="display: none;">請勾選同意場館規範</div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="submitForm()">確認送出</button>
+                </div>
+            </div>
+
+            <!-- 完成頁面 -->
+            <div class="question-page" data-page="9">
+                <div class="completion-modern">
+                    <div class="completion-icon-wrapper">
+                        <div class="completion-icon-bg">
+                            <div class="completion-icon">✓</div>
+                        </div>
+                    </div>
+
+                    <h1 class="completion-title">提交成功！</h1>
+                    <p class="completion-subtitle">感謝您完成問卷填寫<br>我們已收到您的資料</p>
+
+                    <div class="completion-info-cards">
+                        <div class="completion-info-card">
+                            <div class="completion-info-icon">💬</div>
+                            <div class="completion-info-title">LINE 訊息通知</div>
+                            <div class="completion-info-text">官方將透過 LINE 傳送預約相關資訊</div>
+                        </div>
+                    </div>
+
+                    <div class="completion-reminder">
+                        <div class="completion-reminder-title">
+                            <span>💡</span>
+                            <span>溫馨提醒</span>
+                        </div>
+                        <p class="completion-reminder-text">
+                            • 如有任何問題,請透過官方LINE洽詢<br>
+                            • 我們將盡快與您聯繫
+                        </p>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="lineId" value="">
+
+    <script>
+        const WEBHOOK_URL = 'https://hook.us2.make.com/6rfz9vsjnqqxr6s6bnx2cr9njax93yyg';
+
+        let currentPage = 1;
+        const totalPages = 9;
+        let formData = {};
+        let editingSections = {
+            basic: false,
+            fitness: false
+        };
+
+        async function initializeLiff() {
+            try {
+                await liff.init({ liffId: '2008660081-6nVn3KAp' });
+                
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                    return;
+                }
+                
+                const profile = await liff.getProfile();
+                const lineId = profile.userId;
+                const displayName = profile.displayName;
+                
+                document.getElementById('lineId').value = lineId;
+                formData.lineId = lineId;
+                formData.displayName = displayName;
+                
+                await checkUserSubmitted(lineId);
+                
+            } catch (error) {
+                console.error('LIFF initialization failed:', error);
+                hideLoading();
+            }
+        }
+
+        async function checkUserSubmitted(lineId) {
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        action: 'check',
+                        lineId: lineId 
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (result.submitted === true || result.submitted === 'true') {
+                        document.querySelectorAll('.question-page').forEach(function(page) {
+                            page.classList.remove('active');
+                        });
+                        currentPage = 9;
+                        document.querySelector('[data-page="9"]').classList.add('active');
+                        updateProgress();
+                    }
+                }
+                
+                hideLoading();
+                
+            } catch (error) {
+                console.error('檢查用戶狀態失敗:', error);
+                hideLoading();
+            }
+        }
+
+        function hideLoading() {
+            var loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+
+        function saveFormDataToStorage() {
+            try {
+                var dataToSave = {
+                    formData: formData,
+                    currentPage: currentPage,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('fitnessFormData', JSON.stringify(dataToSave));
+            } catch (e) {
+                console.error('無法儲存資料:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLiff();
+            updateProgress();
+            initializeDateInputs();
+            initializeDiseaseCheckboxes();
+            initializeTimeSlotCheckboxes();
+            loadVenueRules();
+            setupPhoneInput();
+            setupEmailInput();
+            setupGenderInput();
+        });
+
+        function initializeDateInputs() {
+            var today = new Date();
+            
+            var yearSelect = document.getElementById('birthdayYear');
+            var currentYear = today.getFullYear();
+            for (var year = currentYear; year >= currentYear - 100; year--) {
+                var option = document.createElement('option');
+                option.value = year;
+                option.textContent = year + ' 年';
+                yearSelect.appendChild(option);
+            }
+            
+            var monthSelect = document.getElementById('birthdayMonth');
+            for (var month = 1; month <= 12; month++) {
+                var option = document.createElement('option');
+                option.value = month.toString().padStart(2, '0');
+                option.textContent = month + ' 月';
+                monthSelect.appendChild(option);
+            }
+            
+            updateDayOptions();
+            
+            yearSelect.addEventListener('change', updateDayOptions);
+            monthSelect.addEventListener('change', updateDayOptions);
+            yearSelect.addEventListener('change', updateHiddenDate);
+            monthSelect.addEventListener('change', updateHiddenDate);
+            document.getElementById('birthdayDay').addEventListener('change', updateHiddenDate);
+        }
+        
+        function updateDayOptions() {
+            var yearSelect = document.getElementById('birthdayYear');
+            var monthSelect = document.getElementById('birthdayMonth');
+            var daySelect = document.getElementById('birthdayDay');
+            
+            var year = parseInt(yearSelect.value);
+            var month = parseInt(monthSelect.value);
+            
+            daySelect.innerHTML = '<option value="">日</option>';
+            
+            if (!year || !month) return;
+            
+            var daysInMonth = new Date(year, month, 0).getDate();
+            
+            for (var day = 1; day <= daysInMonth; day++) {
+                var option = document.createElement('option');
+                option.value = day.toString().padStart(2, '0');
+                option.textContent = day + ' 日';
+                daySelect.appendChild(option);
+            }
+        }
+        
+        function updateHiddenDate() {
+            var year = document.getElementById('birthdayYear').value;
+            var month = document.getElementById('birthdayMonth').value;
+            var day = document.getElementById('birthdayDay').value;
+            
+            if (year && month && day) {
+                var dateStr = year + '-' + month + '-' + day;
+                document.getElementById('birthday').value = dateStr;
+            }
+        }
+
+        function initializeDiseaseCheckboxes() {
+            var jointCheckbox = document.getElementById('jointIssue');
+            var spineCheckbox = document.getElementById('spineIssue');
+            var otherCheckbox = document.getElementById('otherDisease');
+            var noDiseaseCheckbox = document.getElementById('noDisease');
+            var jointDetail = document.getElementById('jointDetail');
+            var spineDetail = document.getElementById('spineDetail');
+            var otherDetail = document.getElementById('otherDetail');
+
+            jointCheckbox.addEventListener('change', function() {
+                jointDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) jointDetail.value = '';
+            });
+
+            spineCheckbox.addEventListener('change', function() {
+                spineDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) spineDetail.value = '';
+            });
+
+            otherCheckbox.addEventListener('change', function() {
+                otherDetail.style.display = this.checked ? 'block' : 'none';
+                if (!this.checked) otherDetail.value = '';
+            });
+
+            noDiseaseCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    document.querySelectorAll('input[name="disease"]').forEach(function(cb) {
+                        if (cb !== noDiseaseCheckbox) {
+                            cb.checked = false;
+                            var parentOption = cb.closest('.option');
+                            if (parentOption) {
+                                parentOption.classList.remove('selected');
+                            }
+                        }
+                    });
+                    jointDetail.style.display = 'none';
+                    jointDetail.value = '';
+                    spineDetail.style.display = 'none';
+                    spineDetail.value = '';
+                    otherDetail.style.display = 'none';
+                    otherDetail.value = '';
+                }
+            });
+
+            document.querySelectorAll('input[name="disease"]').forEach(function(cb) {
+                if (cb !== noDiseaseCheckbox) {
+                    cb.addEventListener('change', function() {
+                        if (this.checked) {
+                            noDiseaseCheckbox.checked = false;
+                            var noDiseaseOption = noDiseaseCheckbox.closest('.option');
+                            if (noDiseaseOption) {
+                                noDiseaseOption.classList.remove('selected');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function initializeTimeSlotCheckboxes() {
+            ['weekdayDay', 'weekdayNight', 'weekendDay', 'weekendNight'].forEach(function(id) {
+                var checkbox = document.getElementById(id);
+                var timeInput = document.getElementById(id + 'Time');
+                checkbox.addEventListener('change', function() {
+                    timeInput.style.display = this.checked ? 'block' : 'none';
+                });
+            });
+        }
+
+        function setupGenderInput() {
+            var genderInputs = document.querySelectorAll('input[name="genderSelect"]');
+            genderInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    genderInputs.forEach(function(radio) {
+                        if (radio.closest('.option')) {
+                            radio.closest('.option').classList.remove('selected');
+                        }
+                    });
+                    
+                    if (this.checked && this.closest('.option')) {
+                        this.closest('.option').classList.add('selected');
+                    }
+                });
+            });
+        }
+
+        function setupEmailInput() {
+            var emailInput = document.getElementById('email');
+            var suggestionsDiv = document.getElementById('emailDomainSuggestions');
+            var domains = ['gmail.com', 'yahoo.com.tw', 'hotmail.com', 'outlook.com', 'icloud.com'];
+            
+            emailInput.addEventListener('input', function(e) {
+                var value = e.target.value;
+                
+                if (value.includes('@') && value.split('@')[1].length > 0) {
+                    suggestionsDiv.style.display = 'none';
+                    return;
+                }
+                
+                if (value.includes('@')) {
+                    var username = value.split('@')[0];
+                    if (!username) {
+                        suggestionsDiv.style.display = 'none';
+                        return;
+                    }
+                    
+                    suggestionsDiv.innerHTML = domains.map(function(domain) {
+                        return '<div class="email-domain-item" onclick="selectEmailDomain(\'' + username + '@' + domain + '\')">' + username + '@' + domain + '</div>';
+                    }).join('');
+                    suggestionsDiv.style.display = 'block';
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!emailInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+        }
+
+        function selectEmailDomain(email) {
+            document.getElementById('email').value = email;
+            document.getElementById('emailDomainSuggestions').style.display = 'none';
+        }
+
+        function setupPhoneInput() {
+            var phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            }
+        }
+
+        function loadVenueRules() {
+            var rulesHTML = '<div style="color: #5f846f; line-height: 1.6; font-size: 15px;"><h3 style="color: #5f846f; font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #7ac19a;">場館規範</h3><p style="margin-bottom: 18px; color: #66888e; font-size: 14px;">為提供穩定及高品質的課程體驗,敬請上課學員配合以下規範</p><div style="display: grid; gap: 12px; margin-bottom: 18px;"><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">1.</strong> 採全預約制,預約依照系統為準,不做口頭保留</div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">2.</strong> 為維護三方權益,到場上課務必進行紙本及電子簽到</div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">3.</strong> 除飲用水外,私人物品請寄放於置物櫃</div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">4.</strong> 運動/伸展/等待區域禁止用餐</div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">5.</strong> 服裝規範:全館須脫鞋、須著運動服裝</div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b;"><strong style="color: #ba9e60;">6.</strong> 正課學員若攜陪同者,陪同者不得滯留超過15分鐘</div></div><div style="background: linear-gradient(135deg, #66888e 0%, #5f846f 100%); color: #ffffff; padding: 18px; border-radius: 12px; margin: 18px 0; text-align: center; font-weight: 600; font-size: 14px;">為維護他人上課品質及權益,場館有權拒絕未遵守規範者進入<br>※衡點健康保留最終解釋權</div><div style="background: #faece8; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 2px solid #f2ac98;"><h3 style="color: #c67566; font-size: 17px; font-weight: 700; margin-bottom: 14px;">取消及請假政策</h3><div style="display: grid; gap: 10px;"><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>一般「取消預約」政策:</strong><br>預約日的<span style="color: #ba9e60; font-weight: bold;">前一天晚上8點前</span>提出取消</div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>臨時「請假」政策:</strong><br>課程<span style="color: #ba9e60; font-weight: bold;">前3小時</span>提出請假<br><strong style="color: #c67566;">補課卡:300元</strong></div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong style="color: #c67566;">重要提醒:</strong><br>無遵守規則皆視同「曠課」,曠課無法進行補課</div></div></div><div style="background: #daedec; padding: 14px; border-radius: 10px; text-align: center; color: #66888e; font-size: 13px;">如有疑問請洽官方LINE<br><span style="font-size: 12px;">衡點健康 © 2025</span></div></div>';
+            
+            document.getElementById('venueRules').innerHTML = rulesHTML;
+            
+            var rulesContainer = document.getElementById('venueRules');
+            var agreeCheckbox = document.getElementById('agreeRules');
+            var agreeLabel = document.getElementById('agreeRulesLabel');
+            
+            rulesContainer.addEventListener('scroll', function() {
+                var isAtBottom = rulesContainer.scrollHeight - rulesContainer.scrollTop - rulesContainer.clientHeight < 5;
+                
+                if (isAtBottom) {
+                    agreeCheckbox.disabled = false;
+                    agreeLabel.style.cursor = 'pointer';
+                    agreeLabel.style.opacity = '1';
+                    agreeLabel.style.background = 'linear-gradient(135deg, #fcf4e3 0%, #daedec 100%)';
+                }
+            });
+        }
+
+        function toggleEdit(section) {
+            editingSections[section] = !editingSections[section];
+            var button = event.target;
+            
+            if (section === 'basic') {
+                var nameInput = document.getElementById('edit_name');
+                var genderInputs = document.querySelectorAll('input[name="editGenderSelect"]');
+                var birthdayInput = document.getElementById('edit_birthday');
+                var emailInput = document.getElementById('edit_email');
+                var phoneInput = document.getElementById('edit_phone');
+                
+                if (editingSections[section]) {
+                    nameInput.disabled = false;
+                    genderInputs.forEach(function(input) { input.disabled = false; });
+                    birthdayInput.disabled = false;
+                    emailInput.disabled = false;
+                    phoneInput.disabled = false;
+                    button.textContent = '保存';
+                } else {
+                    if (!validateBasicInfoEdit()) {
+                        editingSections[section] = true;
+                        return;
+                    }
+                    nameInput.disabled = true;
+                    genderInputs.forEach(function(input) { input.disabled = true; });
+                    birthdayInput.disabled = true;
+                    emailInput.disabled = true;
+                    phoneInput.disabled = true;
+                    button.textContent = '修改';
+                }
+            } else if (section === 'fitness') {
+                var goalsDisplay = document.getElementById('edit_goals_display');
+                var goalsContainer = document.getElementById('edit_goals_container');
+                var courseDisplay = document.getElementById('edit_course_display');
+                var courseContainer = document.getElementById('edit_course_container');
+                var remarksTextarea = document.getElementById('edit_remarks');
+                
+                if (editingSections[section]) {
+                    goalsDisplay.style.display = 'none';
+                    goalsContainer.style.display = 'block';
+                    courseDisplay.style.display = 'none';
+                    courseContainer.style.display = 'block';
+                    remarksTextarea.disabled = false;
+                    button.textContent = '保存';
+                } else {
+                    var goalsSelect = document.getElementById('edit_goals');
+                    var courseSelect = document.getElementById('edit_course');
+                    var selectedGoals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
+                    var selectedCourses = Array.from(courseSelect.selectedOptions).map(function(opt) { return opt.value; });
+                    
+                    if (selectedGoals.length === 0) {
+                        alert('請至少選擇一項健身目標');
+                        editingSections[section] = true;
+                        return;
+                    }
+                    
+                    if (selectedCourses.length === 0) {
+                        alert('請至少選擇一項課程偏好');
+                        editingSections[section] = true;
+                        return;
+                    }
+                    
+                    formData.goals = selectedGoals;
+                    formData.courses = selectedCourses;
+                    formData.remarks = remarksTextarea.value;
+                    
+                    goalsDisplay.style.display = 'block';
+                    goalsContainer.style.display = 'none';
+                    courseDisplay.style.display = 'block';
+                    courseContainer.style.display = 'none';
+                    remarksTextarea.disabled = true;
+                    button.textContent = '修改';
+                    
+                    document.getElementById('edit_goals_display').textContent = selectedGoals.join('、');
+                    document.getElementById('edit_course_display').textContent = selectedCourses.join('、');
+                }
+            }
+        }
+
+        function validateBasicInfoEdit() {
+            var name = document.getElementById('edit_name').value.trim();
+            var genderChecked = document.querySelector('input[name="editGenderSelect"]:checked');
+            var birthday = document.getElementById('edit_birthday').value;
+            var email = document.getElementById('edit_email').value.trim();
+            var phone = document.getElementById('edit_phone').value.trim();
+            
+            var errorDiv = document.getElementById('editError');
+            errorDiv.style.display = 'none';
+            
+            if (!name) { errorDiv.textContent = '請輸入姓名'; errorDiv.style.display = 'block'; return false; }
+            if (!genderChecked) { errorDiv.textContent = '請選擇性別'; errorDiv.style.display = 'block'; return false; }
+            if (!birthday) { errorDiv.textContent = '請選擇生日'; errorDiv.style.display = 'block'; return false; }
+            
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailPattern.test(email)) { errorDiv.textContent = '請輸入有效的電子信箱'; errorDiv.style.display = 'block'; return false; }
+            if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
+            
+            return true;
+        }
+
+        function nextPage() {
+            if (!validateCurrentPage()) return;
+            
+            saveCurrentPageData();
+            saveFormDataToStorage();
+            
+            if (currentPage === 6) {
+                displayReviewData();
+            }
+            
+            document.querySelectorAll('.question-page').forEach(function(page) {
+                page.classList.remove('active');
+            });
+            
+            currentPage++;
+            var nextPageElement = document.querySelector('[data-page="' + currentPage + '"]');
+            if (nextPageElement) {
+                nextPageElement.classList.add('active');
+            }
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function prevPage() {
+            document.querySelectorAll('.question-page').forEach(function(page) {
+                page.classList.remove('active');
+            });
+            
+            currentPage--;
+            
+            var prevPageElement = document.querySelector('[data-page="' + currentPage + '"]');
+            if (prevPageElement) {
+                prevPageElement.classList.add('active');
+            }
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function validateCurrentPage() {
+            document.querySelectorAll('.error-message').forEach(function(el) { el.style.display = 'none'; });
+            
+            if (currentPage === 1) {
+                if (document.querySelectorAll('input[name="goal"]:checked').length === 0) {
+                    document.getElementById('goalError').style.display = 'block';
+                    alert('⚠️ 請至少選擇一項健身目標');
+                    return false;
+                }
+            }
+            
+            if (currentPage === 2) {
+                if (document.querySelectorAll('input[name="course"]:checked').length === 0) {
+                    document.getElementById('courseError').style.display = 'block';
+                    alert('⚠️ 請至少選擇一項課程類型');
+                    return false;
+                }
+            }
+            
+            if (currentPage === 3) {
+                if (document.querySelectorAll('input[name="disease"]:checked').length === 0) {
+                    document.getElementById('diseaseError').style.display = 'block';
+                    alert('⚠️ 請至少選擇一項疾病史選項');
+                    return false;
+                }
+            }
+            
+            if (currentPage === 5) {
+                var name = document.getElementById('name').value.trim();
+                var genderChecked = document.querySelector('input[name="genderSelect"]:checked');
+                var year = document.getElementById('birthdayYear').value;
+                var month = document.getElementById('birthdayMonth').value;
+                var day = document.getElementById('birthdayDay').value;
+                var email = document.getElementById('email').value.trim();
+                var phone = document.getElementById('phone').value.trim();
+                var errorDiv = document.getElementById('basicInfoError');
+                
+                if (!name) { errorDiv.textContent = '請輸入姓名'; errorDiv.style.display = 'block'; return false; }
+                if (!genderChecked) { errorDiv.textContent = '請選擇性別'; errorDiv.style.display = 'block'; return false; }
+                if (!year || !month || !day) { errorDiv.textContent = '請選擇完整的生日'; errorDiv.style.display = 'block'; return false; }
+                
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailPattern.test(email)) { errorDiv.textContent = '請輸入有效的電子信箱'; errorDiv.style.display = 'block'; return false; }
+                if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
+            }
+            
+            return true;
+        }
+
+        function saveCurrentPageData() {
+            if (currentPage === 1) {
+                formData.goals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(function(cb) { return cb.value; });
+            }
+            if (currentPage === 2) {
+                formData.courses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(function(cb) { return cb.value; });
+            }
+            if (currentPage === 3) {
+                formData.diseases = [];
+                
+                var allCheckedBoxes = document.querySelectorAll('input[name="disease"]:checked');
+                
+                allCheckedBoxes.forEach(function(checkbox) {
+                    var checkboxId = checkbox.id;
+                    var checkboxValue = checkbox.value;
+                    
+                    if (checkboxId === 'jointIssue') {
+                        var jointDetail = document.getElementById('jointDetail').value.trim();
+                        if (jointDetail) {
+                            formData.diseases.push('關節問題: ' + jointDetail);
+                        } else {
+                            formData.diseases.push('關節問題');
+                        }
+                    } else if (checkboxId === 'spineIssue') {
+                        var spineDetail = document.getElementById('spineDetail').value.trim();
+                        if (spineDetail) {
+                            formData.diseases.push('脊椎問題: ' + spineDetail);
+                        } else {
+                            formData.diseases.push('脊椎問題');
+                        }
+                    } else if (checkboxId === 'otherDisease') {
+                        var otherDetail = document.getElementById('otherDetail').value.trim();
+                        if (otherDetail) {
+                            formData.diseases.push('其他: ' + otherDetail);
+                        } else {
+                            formData.diseases.push('其他');
+                        }
+                    } else {
+                        formData.diseases.push(checkboxValue);
+                    }
+                });
+            }
+            if (currentPage === 4) {
+                formData.remarks = document.getElementById('remarks').value;
+            }
+            if (currentPage === 5) {
+                formData.name = document.getElementById('name').value.trim();
+                var genderChecked = document.querySelector('input[name="genderSelect"]:checked');
+                formData.gender = genderChecked ? genderChecked.value : '';
+                formData.birthday = document.getElementById('birthday').value;
+                formData.email = document.getElementById('email').value.trim();
+                formData.phone = document.getElementById('phone').value.trim();
+            }
+            if (currentPage === 6) {
+                formData.timePreferences = [];
+                ['weekdayDay', 'weekdayNight', 'weekendDay', 'weekendNight'].forEach(function(id) {
+                    var checkbox = document.getElementById(id);
+                    if (checkbox.checked) {
+                        var time = document.getElementById(id + 'Time').value;
+                        formData.timePreferences.push({ slot: checkbox.value, time: time || '' });
+                    }
+                });
+                var flexCheckbox = document.querySelector('input[name="timeSlot"][value="彈性不固定"]');
+                if (flexCheckbox && flexCheckbox.checked) {
+                    formData.timePreferences.push({ slot: '彈性不固定', time: '' });
+                }
+            }
+        }
+
+        function displayReviewData() {
+            document.getElementById('edit_name').value = formData.name || '';
+            
+            if (formData.gender) {
+                var genderRadio = document.querySelector('input[name="editGenderSelect"][value="' + formData.gender + '"]');
+                if (genderRadio) {
+                    genderRadio.checked = true;
+                    genderRadio.parentElement.classList.add('selected');
+                }
+            }
+            
+            document.getElementById('edit_birthday').value = formData.birthday || '';
+            document.getElementById('edit_email').value = formData.email || '';
+            document.getElementById('edit_phone').value = formData.phone || '';
+            document.getElementById('edit_remarks').value = formData.remarks || '';
+            
+            var goalsSelect = document.getElementById('edit_goals');
+            Array.from(goalsSelect.options).forEach(function(option) {
+                option.selected = (formData.goals || []).includes(option.value);
+            });
+            
+            var courseSelect = document.getElementById('edit_course');
+            Array.from(courseSelect.options).forEach(function(option) {
+                option.selected = (formData.courses || []).includes(option.value);
+            });
+            
+            document.getElementById('edit_goals_display').textContent = (formData.goals || []).join('、') || '未填寫';
+            document.getElementById('edit_course_display').textContent = (formData.courses || []).join('、') || '未填寫';
+            document.getElementById('edit_diseases_display').textContent = (formData.diseases || []).join('、') || '未填寫';
+            
+            var timePrefsHTML = (formData.timePreferences || []).map(function(tp) {
+                return '<p style="margin-bottom: 8px;"><strong>' + tp.slot + ':</strong> ' + (tp.time || '全時段') + '</p>';
+            }).join('');
+            document.getElementById('edit_time_preferences').innerHTML = timePrefsHTML || '<p style="color: #808080;">未填寫</p>';
+        }
+
+        function saveEditedData() {
+            for (var section in editingSections) {
+                if (editingSections[section]) {
+                    alert('請先保存所有修改');
+                    return;
+                }
+            }
+            
+            formData.name = document.getElementById('edit_name').value.trim();
+            var genderChecked = document.querySelector('input[name="editGenderSelect"]:checked');
+            formData.gender = genderChecked ? genderChecked.value : '';
+            formData.birthday = document.getElementById('edit_birthday').value;
+            formData.email = document.getElementById('edit_email').value.trim();
+            formData.phone = document.getElementById('edit_phone').value.trim();
+            
+            var goalsSelect = document.getElementById('edit_goals');
+            formData.goals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
+            
+            var courseSelect = document.getElementById('edit_course');
+            formData.courses = Array.from(courseSelect.selectedOptions).map(function(opt) { return opt.value; });
+            
+            formData.remarks = document.getElementById('edit_remarks').value;
+            
+            nextPage();
+        }
+
+        async function submitForm() {
+            if (!document.getElementById('agreeRules').checked) {
+                document.getElementById('rulesError').style.display = 'block';
+                alert('⚠️ 請勾選同意場館規範');
+                return;
+            }
+            
+            await submitToWebhook();
+        }
+
+        async function submitToWebhook() {
+            var buttons = document.querySelectorAll('[data-page="8"] .button');
+            buttons.forEach(function(btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+            });
+            
+            saveCurrentPageData();
+            
+            var submitData = {
+                action: 'submit',
+                lineId: formData.lineId || '',
+                displayName: formData.displayName || '',
+                name: formData.name || '',
+                gender: formData.gender || '',
+                birthday: formData.birthday || '',
+                email: formData.email || '',
+                phone: formData.phone || '',
+                goals: (formData.goals || []).join('、'),
+                courses: (formData.courses || []).join('、'),
+                diseases: (formData.diseases || []).join('、'),
+                remarks: formData.remarks || '',
+                timePreferences: (formData.timePreferences || []).map(function(tp) { return tp.slot + ': ' + (tp.time || '全時段'); }).join(' | '),
+                submittedAt: new Date().toISOString()
+            };
+            
+            try {
+                var response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(submitData)
+                });
+                
+                if (response.ok) {
+                    localStorage.removeItem('fitnessFormData');
+                    
+                    // 跳轉功能已移除，統一顯示完成頁面
+                    document.querySelectorAll('.question-page').forEach(function(page) {
+                        page.classList.remove('active');
+                    });
+                    currentPage = 9;
+                    document.querySelector('[data-page="9"]').classList.add('active');
+                    updateProgress();
+                    window.scrollTo(0, 0);
+                } else {
+                    buttons.forEach(function(btn) { btn.disabled = false; btn.style.opacity = '1'; });
+                    alert('提交失敗,請稍後再試');
+                }
+            } catch (error) {
+                console.error('提交錯誤:', error);
+                buttons.forEach(function(btn) { btn.disabled = false; btn.style.opacity = '1'; });
+                alert('網路錯誤,請稍後再試');
+            }
+        }
+
+        function updateProgress() {
+            var progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' || e.target.type === 'radio') {
+                var option = e.target.closest('.option');
+                if (option) {
+                    if (e.target.type === 'radio') {
+                        var radioName = e.target.name;
+                        document.querySelectorAll('input[name="' + radioName + '"]').forEach(function(radio) {
+                            var parentOption = radio.closest('.option');
+                            if (parentOption) parentOption.classList.remove('selected');
+                        });
+                    }
+                    
+                    if (e.target.checked) {
+                        option.classList.add('selected');
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
