@@ -2539,7 +2539,7 @@
                 displayName: formData.displayName || '',
                 name: formData.name || '',
                 gender: formData.gender || '',
-                birthday: formData.birthday || '',
+                birthday: (formData.birthday || '').replace(/-/g, '/'),
                 email: formData.email || '',
                 phone: formData.phone || '',
                 goals: (formData.goals || []).join('、'),
