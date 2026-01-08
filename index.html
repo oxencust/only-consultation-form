@@ -1397,7 +1397,7 @@
 
         async function initializeLiff() {
             try {
-                await liff.init({ liffId: '22008660081-ZtgkWSgR' });
+                await liff.init({ liffId: '2008660081-ZtgkWSgR' });
                 
                 if (!liff.isLoggedIn()) {
                     liff.login();
@@ -2533,10 +2533,11 @@
                 exerciseExp: formData.exerciseExp || '',
                 diseases: (formData.diseases || []).join('、'),
                 remarks: formData.remarks || '',
-                timePreferences: (formData.timePreferences || []).map(function(tp) { 
-                    if (tp.slot === '彈性不固定') return tp.slot;
-                    return tp.slot + ': ' + (tp.time || '全時段'); 
-                }).join(' | '),
+                timePreferences: (formData.timePreferences || []).map(function(tp, index) { 
+                    var num = (index + 1) + '. ';
+                    if (tp.slot === '彈性不固定') return num + tp.slot;
+                    return num + tp.slot + ': ' + (tp.time || '全時段'); 
+                }).join('\n'),
                 submittedAt: new Date().toLocaleString('zh-TW', { 
                     year: 'numeric', 
                     month: '2-digit', 
