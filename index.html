@@ -926,6 +926,31 @@
                     <div class="edit-field">
                         <label>疾病史</label>
                         <div id="edit_diseases_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
+                        <div id="edit_diseases_container" style="display: none;">
+                            <select id="edit_diseases" class="text-input" multiple size="8" style="height: auto;">
+                                <option value="心臟病">心臟病</option>
+                                <option value="心絞痛">心絞痛</option>
+                                <option value="糖尿病">糖尿病</option>
+                                <option value="疝氣/脫腸">疝氣/脫腸</option>
+                                <option value="高血壓">高血壓</option>
+                                <option value="氣喘">氣喘</option>
+                                <option value="貧血">貧血</option>
+                                <option value="癲癇">癲癇</option>
+                                <option value="甲狀腺問題">甲狀腺問題</option>
+                                <option value="靜脈瘤">靜脈瘤</option>
+                                <option value="惡性腫瘤">惡性腫瘤</option>
+                                <option value="椎間盤突出">椎間盤突出</option>
+                                <option value="習慣性脫臼">習慣性脫臼</option>
+                                <option value="脊椎滑脫">脊椎滑脫</option>
+                                <option value="骨質疏鬆症">骨質疏鬆症</option>
+                                <option value="痛風/風濕">痛風/風濕</option>
+                                <option value="關節問題">關節問題</option>
+                                <option value="脊椎問題">脊椎問題</option>
+                                <option value="其他">其他</option>
+                                <option value="無">無</option>
+                            </select>
+                            <input type="text" id="edit_diseases_detail" class="text-input" placeholder="如有其他說明請在此填寫（例如：右膝關節疼痛3個月）" style="margin-top: 10px;">
+                        </div>
                     </div>
                     <div class="edit-field">
                         <label>備註</label>
@@ -979,7 +1004,7 @@
                         <div class="completion-info-card">
                             <div class="completion-info-icon">💬</div>
                             <div class="completion-info-title">LINE 訊息通知</div>
-                            <div class="completion-info-text">官方將盡快與您聯繫</div>
+                            <div class="completion-info-text">官方將透過 LINE 傳送預約相關資訊</div>
                         </div>
                     </div>
 
@@ -1358,6 +1383,8 @@
                 var goalsContainer = document.getElementById('edit_goals_container');
                 var courseDisplay = document.getElementById('edit_course_display');
                 var courseContainer = document.getElementById('edit_course_container');
+                var diseasesDisplay = document.getElementById('edit_diseases_display');
+                var diseasesContainer = document.getElementById('edit_diseases_container');
                 var remarksTextarea = document.getElementById('edit_remarks');
                 
                 if (editingSections[section]) {
@@ -1365,13 +1392,18 @@
                     goalsContainer.style.display = 'block';
                     courseDisplay.style.display = 'none';
                     courseContainer.style.display = 'block';
+                    diseasesDisplay.style.display = 'none';
+                    diseasesContainer.style.display = 'block';
                     remarksTextarea.disabled = false;
                     button.textContent = '保存';
                 } else {
                     var goalsSelect = document.getElementById('edit_goals');
                     var courseSelect = document.getElementById('edit_course');
+                    var diseasesSelect = document.getElementById('edit_diseases');
+                    var diseasesDetail = document.getElementById('edit_diseases_detail').value.trim();
                     var selectedGoals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
                     var selectedCourses = Array.from(courseSelect.selectedOptions).map(function(opt) { return opt.value; });
+                    var selectedDiseases = Array.from(diseasesSelect.selectedOptions).map(function(opt) { return opt.value; });
                     
                     if (selectedGoals.length === 0) {
                         alert('請至少選擇一項健身目標');
@@ -1385,19 +1417,34 @@
                         return;
                     }
                     
+                    if (selectedDiseases.length === 0) {
+                        alert('請至少選擇一項疾病史選項');
+                        editingSections[section] = true;
+                        return;
+                    }
+                    
                     formData.goals = selectedGoals;
                     formData.courses = selectedCourses;
                     formData.remarks = remarksTextarea.value;
+                    
+                    // 處理疾病史，如果有詳細說明則附加
+                    formData.diseases = selectedDiseases.slice();
+                    if (diseasesDetail) {
+                        formData.diseases.push('補充說明: ' + diseasesDetail);
+                    }
                     
                     goalsDisplay.style.display = 'block';
                     goalsContainer.style.display = 'none';
                     courseDisplay.style.display = 'block';
                     courseContainer.style.display = 'none';
+                    diseasesDisplay.style.display = 'block';
+                    diseasesContainer.style.display = 'none';
                     remarksTextarea.disabled = true;
                     button.textContent = '修改';
                     
                     document.getElementById('edit_goals_display').textContent = selectedGoals.join('、');
                     document.getElementById('edit_course_display').textContent = selectedCourses.join('、');
+                    document.getElementById('edit_diseases_display').textContent = formData.diseases.join('、');
                 }
             }
         }
@@ -1603,6 +1650,16 @@
             var courseSelect = document.getElementById('edit_course');
             Array.from(courseSelect.options).forEach(function(option) {
                 option.selected = (formData.courses || []).includes(option.value);
+            });
+            
+            // 預選疾病史選項
+            var diseasesSelect = document.getElementById('edit_diseases');
+            var diseaseValues = (formData.diseases || []).map(function(d) {
+                // 移除詳細說明部分，只保留選項名稱
+                return d.split(':')[0].trim();
+            });
+            Array.from(diseasesSelect.options).forEach(function(option) {
+                option.selected = diseaseValues.includes(option.value);
             });
             
             document.getElementById('edit_goals_display').textContent = (formData.goals || []).join('、') || '未填寫';
