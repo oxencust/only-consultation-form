@@ -163,7 +163,9 @@
             color: #4a6859;
         }
 
-        .detail-input::placeholder { color: #a89a9a; opacity: 0.7; }
+        .detail-input::placeholder { color: #a89a9a; opacity: 0.7; font-size: 13px; }
+        
+        .text-input::placeholder { font-size: 13px; color: #999; }
 
         .detail-input:focus {
             border-color: #c0ddd0 !important;
@@ -1994,8 +1996,17 @@
                         }
                     }
                     
-                    // 保存健身目標
-                    formData.goals = selectedGoals;
+                    // 保存健身目標（保留術後/產後恢復的詳細資訊）
+                    formData.goals = selectedGoals.map(function(goal) {
+                        if (goal === '術後/產後恢復') {
+                            // 檢查原本是否有詳細資訊
+                            var originalGoal = (formData.goals || []).find(function(g) {
+                                return g.startsWith('術後/產後恢復:');
+                            });
+                            return originalGoal || goal;
+                        }
+                        return goal;
+                    });
                     
                     // 保存預約體驗課程
                     var courseValue = courseChecked.value;
@@ -2031,7 +2042,7 @@
                     button.textContent = '修改';
                     
                     // 更新顯示
-                    document.getElementById('edit_goals_display').textContent = selectedGoals.join('、');
+                    document.getElementById('edit_goals_display').textContent = formData.goals.join('、');
                     document.getElementById('edit_course_display').textContent = formData.courses;
                     document.getElementById('edit_exerciseExp_display').textContent = formData.exerciseExp;
                 }
@@ -2425,7 +2436,10 @@
             
             var goalsSelect = document.getElementById('edit_goals');
             Array.from(goalsSelect.options).forEach(function(option) {
-                option.selected = (formData.goals || []).includes(option.value);
+                // 檢查是否包含該選項（考慮術後/產後恢復可能帶有詳細資訊）
+                option.selected = (formData.goals || []).some(function(g) {
+                    return g === option.value || g.startsWith(option.value + ':');
+                });
             });
             
             // 預選課程選項
@@ -2534,9 +2548,9 @@
                 diseases: (formData.diseases || []).join('、'),
                 remarks: formData.remarks || '',
                 timePreferences: (formData.timePreferences || []).map(function(tp, index) { 
-                    var num = (index + 1) + '. ';
-                    if (tp.slot === '彈性不固定') return num + tp.slot;
-                    return num + tp.slot + ': ' + (tp.time || '全時段'); 
+                    var prefix = '- ';
+                    if (tp.slot === '彈性不固定') return prefix + tp.slot;
+                    return prefix + tp.slot + ': ' + (tp.time || '全時段'); 
                 }).join('\n'),
                 submittedAt: new Date().toLocaleString('zh-TW', { 
                     year: 'numeric', 
