@@ -1151,6 +1151,40 @@
                         <label>電話 <span class="required">*</span></label>
                         <input type="tel" id="phone" class="text-input" placeholder="09xxxxxxxx" maxlength="10">
                     </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>職業 <span class="required">*</span></label>
+                        <select id="occupation" class="text-input">
+                            <option value="">請選擇職業</option>
+                            <option value="民意代表、主管及經理人員">民意代表、主管及經理人員 (如：經理、主任)</option>
+                            <option value="專業人員">專業人員 (如：醫師、律師、工程師、教師)</option>
+                            <option value="技術員及助理專業人員">技術員及助理專業人員 (如：護士、技師)</option>
+                            <option value="事務支援人員">事務支援人員 (如：秘書、出納、行政人員)</option>
+                            <option value="服務及銷售工作人員">服務及銷售工作人員 (如：銷售員、服務員、空服員)</option>
+                            <option value="農林漁牧業生產人員">農林漁牧業生產人員 (如：農場主人、漁夫)</option>
+                            <option value="技藝有關工作人員">技藝有關工作人員 (如：廚師、理髮師、美髮師)</option>
+                            <option value="機械設備操作及組裝人員">機械設備操作及組裝人員 (如：機台操作員、裝配工)</option>
+                            <option value="基層技術工及勞力工">基層技術工及勞力工 (如：清潔工、搬運工)</option>
+                            <option value="軍人">軍人</option>
+                            <option value="其他">其他</option>
+                        </select>
+                        <input type="text" id="occupationOther" class="text-input" placeholder="請輸入您的職業" style="display: none; margin-top: 8px;">
+                    </div>
+                    
+                    <div class="edit-field full-width">
+                        <label>填寫人 <span class="required">*</span></label>
+                        <div class="gender-select-group">
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="applicantType" value="本人">
+                                <span>本人</span>
+                            </label>
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="applicantType" value="非本人">
+                                <span>非本人</span>
+                            </label>
+                        </div>
+                        <input type="text" id="applicantDetail" class="text-input" placeholder="請輸入填寫人身份，例如：母親、配偶" style="display: none; margin-top: 8px;">
+                    </div>
                 </div>
                 
                 <div id="basicInfoError" class="error-message" style="display: none;"></div>
@@ -1237,6 +1271,38 @@
                     <div class="edit-field">
                         <label>電話 <span class="required">*</span></label>
                         <input type="tel" id="edit_phone" class="text-input" maxlength="10" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>職業 <span class="required">*</span></label>
+                        <select id="edit_occupation" class="text-input" disabled>
+                            <option value="">請選擇職業</option>
+                            <option value="民意代表、主管及經理人員">民意代表、主管及經理人員</option>
+                            <option value="專業人員">專業人員</option>
+                            <option value="技術員及助理專業人員">技術員及助理專業人員</option>
+                            <option value="事務支援人員">事務支援人員</option>
+                            <option value="服務及銷售工作人員">服務及銷售工作人員</option>
+                            <option value="農林漁牧業生產人員">農林漁牧業生產人員</option>
+                            <option value="技藝有關工作人員">技藝有關工作人員</option>
+                            <option value="機械設備操作及組裝人員">機械設備操作及組裝人員</option>
+                            <option value="基層技術工及勞力工">基層技術工及勞力工</option>
+                            <option value="軍人">軍人</option>
+                            <option value="其他">其他</option>
+                        </select>
+                        <input type="text" id="edit_occupationOther" class="text-input" placeholder="請輸入您的職業" style="display: none; margin-top: 8px;" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>填寫人 <span class="required">*</span></label>
+                        <div style="display: flex; gap: 10px;">
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="editApplicantType" value="本人" disabled>
+                                <span>本人</span>
+                            </label>
+                            <label class="option" style="flex: 1; margin: 0;">
+                                <input type="radio" name="editApplicantType" value="非本人" disabled>
+                                <span>非本人</span>
+                            </label>
+                        </div>
+                        <input type="text" id="edit_applicantDetail" class="text-input" placeholder="請輸入填寫人身份" style="display: none; margin-top: 8px;" disabled>
                     </div>
                 </div>
 
@@ -1488,6 +1554,8 @@
             setupPhoneInput();
             setupEmailInput();
             setupGenderInput();
+            setupOccupationInput();
+            setupApplicantTypeInput();
             initializeCourseOptions();
             initializeEditOptions();
         });
@@ -1721,6 +1789,77 @@
             });
         }
 
+        function setupOccupationInput() {
+            var occupationSelect = document.getElementById('occupation');
+            var occupationOther = document.getElementById('occupationOther');
+            
+            occupationSelect.addEventListener('change', function() {
+                if (this.value === '其他') {
+                    occupationOther.style.display = 'block';
+                } else {
+                    occupationOther.style.display = 'none';
+                    occupationOther.value = '';
+                }
+            });
+            
+            // 編輯區域的職業選擇
+            var editOccupationSelect = document.getElementById('edit_occupation');
+            var editOccupationOther = document.getElementById('edit_occupationOther');
+            
+            editOccupationSelect.addEventListener('change', function() {
+                if (this.value === '其他') {
+                    editOccupationOther.style.display = 'block';
+                } else {
+                    editOccupationOther.style.display = 'none';
+                    editOccupationOther.value = '';
+                }
+            });
+        }
+
+        function setupApplicantTypeInput() {
+            var applicantRadios = document.querySelectorAll('input[name="applicantType"]');
+            var applicantDetail = document.getElementById('applicantDetail');
+            
+            applicantRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.value === '非本人') {
+                        applicantDetail.style.display = 'block';
+                    } else {
+                        applicantDetail.style.display = 'none';
+                        applicantDetail.value = '';
+                    }
+                    // 更新選中樣式
+                    applicantRadios.forEach(function(r) {
+                        if (r.closest('.option')) r.closest('.option').classList.remove('selected');
+                    });
+                    if (this.checked && this.closest('.option')) {
+                        this.closest('.option').classList.add('selected');
+                    }
+                });
+            });
+            
+            // 編輯區域
+            var editApplicantRadios = document.querySelectorAll('input[name="editApplicantType"]');
+            var editApplicantDetail = document.getElementById('edit_applicantDetail');
+            
+            editApplicantRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (this.value === '非本人') {
+                        editApplicantDetail.style.display = 'block';
+                    } else {
+                        editApplicantDetail.style.display = 'none';
+                        editApplicantDetail.value = '';
+                    }
+                    editApplicantRadios.forEach(function(r) {
+                        if (r.closest('.option')) r.closest('.option').classList.remove('selected');
+                    });
+                    if (this.checked && this.closest('.option')) {
+                        this.closest('.option').classList.add('selected');
+                    }
+                });
+            });
+        }
+
         function initializeCourseOptions() {
             var courseAI = document.getElementById('courseAI');
             var courseOnly = document.getElementById('courseOnly');
@@ -1910,6 +2049,10 @@
                 var birthdayInput = document.getElementById('edit_birthday');
                 var emailInput = document.getElementById('edit_email');
                 var phoneInput = document.getElementById('edit_phone');
+                var occupationInput = document.getElementById('edit_occupation');
+                var occupationOtherInput = document.getElementById('edit_occupationOther');
+                var applicantInputs = document.querySelectorAll('input[name="editApplicantType"]');
+                var applicantDetailInput = document.getElementById('edit_applicantDetail');
                 
                 if (editingSections[section]) {
                     nameInput.disabled = false;
@@ -1917,6 +2060,10 @@
                     birthdayInput.disabled = false;
                     emailInput.disabled = false;
                     phoneInput.disabled = false;
+                    occupationInput.disabled = false;
+                    occupationOtherInput.disabled = false;
+                    applicantInputs.forEach(function(input) { input.disabled = false; });
+                    applicantDetailInput.disabled = false;
                     button.textContent = '保存';
                 } else {
                     if (!validateBasicInfoEdit()) {
@@ -1928,6 +2075,10 @@
                     birthdayInput.disabled = true;
                     emailInput.disabled = true;
                     phoneInput.disabled = true;
+                    occupationInput.disabled = true;
+                    occupationOtherInput.disabled = true;
+                    applicantInputs.forEach(function(input) { input.disabled = true; });
+                    applicantDetailInput.disabled = true;
                     button.textContent = '修改';
                 }
             } else if (section === 'fitness') {
@@ -2066,6 +2217,20 @@
             var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!email || !emailPattern.test(email)) { errorDiv.textContent = '請輸入有效的電子信箱'; errorDiv.style.display = 'block'; return false; }
             if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
+            
+            var editOccupation = document.getElementById('edit_occupation').value;
+            if (!editOccupation) { errorDiv.textContent = '請選擇職業'; errorDiv.style.display = 'block'; return false; }
+            if (editOccupation === '其他') {
+                var editOccupationOther = document.getElementById('edit_occupationOther').value.trim();
+                if (!editOccupationOther) { errorDiv.textContent = '請輸入您的職業'; errorDiv.style.display = 'block'; return false; }
+            }
+            
+            var editApplicantChecked = document.querySelector('input[name="editApplicantType"]:checked');
+            if (!editApplicantChecked) { errorDiv.textContent = '請選擇填寫人'; errorDiv.style.display = 'block'; return false; }
+            if (editApplicantChecked.value === '非本人') {
+                var editApplicantDetail = document.getElementById('edit_applicantDetail').value.trim();
+                if (!editApplicantDetail) { errorDiv.textContent = '請輸入填寫人身份'; errorDiv.style.display = 'block'; return false; }
+            }
             
             return true;
         }
@@ -2282,6 +2447,20 @@
                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!email || !emailPattern.test(email)) { errorDiv.textContent = '請輸入有效的電子信箱'; errorDiv.style.display = 'block'; return false; }
                 if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
+                
+                var occupation = document.getElementById('occupation').value;
+                if (!occupation) { errorDiv.textContent = '請選擇職業'; errorDiv.style.display = 'block'; return false; }
+                if (occupation === '其他') {
+                    var occupationOther = document.getElementById('occupationOther').value.trim();
+                    if (!occupationOther) { errorDiv.textContent = '請輸入您的職業'; errorDiv.style.display = 'block'; return false; }
+                }
+                
+                var applicantChecked = document.querySelector('input[name="applicantType"]:checked');
+                if (!applicantChecked) { errorDiv.textContent = '請選擇填寫人'; errorDiv.style.display = 'block'; return false; }
+                if (applicantChecked.value === '非本人') {
+                    var applicantDetail = document.getElementById('applicantDetail').value.trim();
+                    if (!applicantDetail) { errorDiv.textContent = '請輸入填寫人身份'; errorDiv.style.display = 'block'; return false; }
+                }
             }
             
             if (currentPage === 7) {
@@ -2401,6 +2580,21 @@
                 formData.birthday = document.getElementById('birthday').value;
                 formData.email = document.getElementById('email').value.trim();
                 formData.phone = document.getElementById('phone').value.trim();
+                var occupationSelect = document.getElementById('occupation');
+                if (occupationSelect.value === '其他') {
+                    formData.occupation = '其他: ' + document.getElementById('occupationOther').value.trim();
+                } else {
+                    formData.occupation = occupationSelect.value;
+                }
+                var applicantChecked = document.querySelector('input[name="applicantType"]:checked');
+                if (applicantChecked) {
+                    if (applicantChecked.value === '非本人') {
+                        var detail = document.getElementById('applicantDetail').value.trim();
+                        formData.applicantType = detail ? '非本人: ' + detail : '非本人';
+                    } else {
+                        formData.applicantType = '本人';
+                    }
+                }
             }
             if (currentPage === 7) {
                 formData.timePreferences = [];
@@ -2432,6 +2626,40 @@
             document.getElementById('edit_birthday').value = formData.birthday || '';
             document.getElementById('edit_email').value = formData.email || '';
             document.getElementById('edit_phone').value = formData.phone || '';
+            
+            // 設定職業
+            var editOccupation = document.getElementById('edit_occupation');
+            var editOccupationOther = document.getElementById('edit_occupationOther');
+            var occupationValue = formData.occupation || '';
+            if (occupationValue.startsWith('其他:') || occupationValue.startsWith('其他: ')) {
+                editOccupation.value = '其他';
+                editOccupationOther.style.display = 'block';
+                editOccupationOther.value = occupationValue.replace(/^其他:\s*/, '');
+            } else {
+                editOccupation.value = occupationValue;
+                editOccupationOther.style.display = 'none';
+            }
+            
+            // 設定填寫人
+            var applicantValue = formData.applicantType || '';
+            if (applicantValue.startsWith('非本人')) {
+                var editApplicantRadio = document.querySelector('input[name="editApplicantType"][value="非本人"]');
+                if (editApplicantRadio) {
+                    editApplicantRadio.checked = true;
+                    if (editApplicantRadio.closest('.option')) editApplicantRadio.closest('.option').classList.add('selected');
+                }
+                var editApplicantDetail = document.getElementById('edit_applicantDetail');
+                editApplicantDetail.style.display = 'block';
+                editApplicantDetail.value = applicantValue.replace(/^非本人:\s*/, '');
+            } else if (applicantValue === '本人') {
+                var editApplicantRadio = document.querySelector('input[name="editApplicantType"][value="本人"]');
+                if (editApplicantRadio) {
+                    editApplicantRadio.checked = true;
+                    if (editApplicantRadio.closest('.option')) editApplicantRadio.closest('.option').classList.add('selected');
+                }
+                document.getElementById('edit_applicantDetail').style.display = 'none';
+            }
+            
             document.getElementById('edit_remarks').value = formData.remarks || '';
             
             var goalsSelect = document.getElementById('edit_goals');
@@ -2505,6 +2733,21 @@
             formData.birthday = document.getElementById('edit_birthday').value;
             formData.email = document.getElementById('edit_email').value.trim();
             formData.phone = document.getElementById('edit_phone').value.trim();
+            var editOccupationSelect = document.getElementById('edit_occupation');
+            if (editOccupationSelect.value === '其他') {
+                formData.occupation = '其他: ' + document.getElementById('edit_occupationOther').value.trim();
+            } else {
+                formData.occupation = editOccupationSelect.value;
+            }
+            var editApplicantChecked = document.querySelector('input[name="editApplicantType"]:checked');
+            if (editApplicantChecked) {
+                if (editApplicantChecked.value === '非本人') {
+                    var detail = document.getElementById('edit_applicantDetail').value.trim();
+                    formData.applicantType = detail ? '非本人: ' + detail : '非本人';
+                } else {
+                    formData.applicantType = '本人';
+                }
+            }
             
             var goalsSelect = document.getElementById('edit_goals');
             formData.goals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
@@ -2533,6 +2776,14 @@
             
             saveCurrentPageData();
             
+            var birthdayDate = new Date(formData.birthday);
+            var today = new Date();
+            var age = today.getFullYear() - birthdayDate.getFullYear();
+            var monthDiff = today.getMonth() - birthdayDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdayDate.getDate())) {
+                age--;
+            }
+            
             var submitData = {
                 action: 'submit',
                 lineId: formData.lineId || '',
@@ -2540,8 +2791,11 @@
                 name: formData.name || '',
                 gender: formData.gender || '',
                 birthday: (formData.birthday || '').replace(/-/g, '/'),
+                age: age,
                 email: formData.email || '',
                 phone: formData.phone || '',
+                occupation: formData.occupation || '',
+                applicantType: formData.applicantType || '',
                 goals: (formData.goals || []).join('、'),
                 courses: formData.courses || '',
                 exerciseExp: formData.exerciseExp || '',
