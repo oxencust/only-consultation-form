@@ -1548,18 +1548,17 @@
             try {
                 const result = await callEdge('checkUserSubmitted', { lineId });
 
-                    if (result.submitted === true || result.submitted === 'true') {
-                        document.querySelectorAll('.question-page').forEach(function(page) {
-                            page.classList.remove('active');
-                        });
-                        currentPage = 11;
-                        document.querySelector('[data-page="11"]').classList.add('active');
-                        updateProgress();
-                    }
+                if (result.submitted === true || result.submitted === 'true') {
+                    document.querySelectorAll('.question-page').forEach(function(page) {
+                        page.classList.remove('active');
+                    });
+                    currentPage = 11;
+                    document.querySelector('[data-page="11"]').classList.add('active');
+                    updateProgress();
                 }
-                
+
                 hideLoading();
-                
+
             } catch (error) {
                 console.error('檢查用戶狀態失敗:', error);
                 hideLoading();
@@ -2887,7 +2886,7 @@
                 age: age,
                 email: formData.email || '',
                 phone: formData.phone || '',
-                source: formData.source || '',
+                source_channel: formData.source || '',
                 occupation: formData.occupation || '',
                 applicantType: formData.applicantType || '',
                 goals: (formData.goals || []).join('、'),
