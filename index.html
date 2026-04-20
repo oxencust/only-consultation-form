@@ -1235,8 +1235,44 @@
                 </div>
             </div>
 
-            <!-- Q8: 資料確認 -->
+            <!-- Q8: 在哪認識我們 -->
             <div class="question-page" data-page="8">
+                <h2>在哪認識我們? <span class="required">*必填</span></h2>
+                <p class="subtitle">讓我們了解您是從哪裡得知衡點的</p>
+                <div class="option-group">
+                    <label class="option">
+                        <input type="radio" name="source" value="路過店門口看到DM">
+                        <span>路過店門口看到DM</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="source" value="GOOGLE">
+                        <span>GOOGLE</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="source" value="IG">
+                        <span>IG</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="source" value="FB">
+                        <span>FB</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="source" value="親友介紹" id="sourceFriend">
+                        <span>親友介紹</span>
+                    </label>
+                    <input type="text" class="text-input" id="sourceFriendName"
+                           placeholder="可填寫親友名稱（選填）"
+                           style="display: none; margin-top: -5px;">
+                </div>
+                <div id="sourceError" class="error-message" style="display: none;">請選擇在哪認識我們</div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q9: 資料確認 -->
+            <div class="question-page" data-page="9">
                 <h2>資料確認</h2>
                 <p class="subtitle">請確認所有資料正確，點擊「修改」按鈕可編輯</p>
                 
@@ -1271,6 +1307,10 @@
                     <div class="edit-field">
                         <label>電話 <span class="required">*</span></label>
                         <input type="tel" id="edit_phone" class="text-input" maxlength="10" disabled>
+                    </div>
+                    <div class="edit-field">
+                        <label>在哪認識我們 <span class="required">*</span></label>
+                        <div id="edit_source_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px;"></div>
                     </div>
                     <div class="edit-field">
                         <label>職業 <span class="required">*</span></label>
@@ -1410,8 +1450,8 @@
                 </div>
             </div>
 
-            <!-- Q9: 場館規範 -->
-            <div class="question-page" data-page="9">
+            <!-- Q10: 場館規範 -->
+            <div class="question-page" data-page="10">
                 <h2>場館規範同意書</h2>
                 <p class="subtitle">請詳閱場館規範並同意後才能完成預約</p>
                 <div style="background: #ffffff; border: 2px solid #ffe8e8; border-radius: 12px; padding: 20px; margin-bottom: 20px; max-height: 500px; overflow-y: auto;" id="venueRules">
@@ -1429,7 +1469,7 @@
             </div>
 
             <!-- 完成頁面 -->
-            <div class="question-page" data-page="10">
+            <div class="question-page" data-page="11">
                 <div class="completion-modern">
                     <div class="completion-icon-wrapper">
                         <div class="completion-icon-bg">
@@ -1454,9 +1494,25 @@
 
     <script>
         const WEBHOOK_URL = 'https://hook.us2.make.com/6rfz9vsjnqqxr6s6bnx2cr9njax93yyg';
+        const EDGE_FUNCTION_URL = 'https://mnjilhpztnowaplggvkk.supabase.co/functions/v1/member-api';
+
+        // Helper function to call Edge Function
+        async function callEdge(action, params) {
+            try {
+                const response = await fetch(EDGE_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, ...params })
+                });
+                return await response.json();
+            } catch (error) {
+                console.error(`Edge function error for ${action}:`, error);
+                throw error;
+            }
+        }
 
         let currentPage = 1;
-        const totalPages = 10;
+        const totalPages = 11;
         let formData = {};
         let editingSections = {
             basic: false,
@@ -1490,26 +1546,14 @@
 
         async function checkUserSubmitted(lineId) {
             try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        action: 'check',
-                        lineId: lineId 
-                    })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    
+                const result = await callEdge('checkUserSubmitted', { lineId });
+
                     if (result.submitted === true || result.submitted === 'true') {
                         document.querySelectorAll('.question-page').forEach(function(page) {
                             page.classList.remove('active');
                         });
-                        currentPage = 10;
-                        document.querySelector('[data-page="10"]').classList.add('active');
+                        currentPage = 11;
+                        document.querySelector('[data-page="11"]').classList.add('active');
                         updateProgress();
                     }
                 }
@@ -1556,6 +1600,7 @@
             setupGenderInput();
             setupOccupationInput();
             setupApplicantTypeInput();
+            setupSourceInput();
             initializeCourseOptions();
             initializeEditOptions();
         });
@@ -1813,6 +1858,31 @@
                     editOccupationOther.style.display = 'none';
                     editOccupationOther.value = '';
                 }
+            });
+        }
+
+        function setupSourceInput() {
+            var sourceRadios = document.querySelectorAll('input[name="source"]');
+            var sourceFriendName = document.getElementById('sourceFriendName');
+
+            sourceRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    // 更新選中樣式
+                    sourceRadios.forEach(function(r) {
+                        if (r.closest('.option')) r.closest('.option').classList.remove('selected');
+                    });
+                    if (this.checked && this.closest('.option')) {
+                        this.closest('.option').classList.add('selected');
+                    }
+
+                    // 親友介紹展開文字框
+                    if (this.value === '親友介紹') {
+                        sourceFriendName.style.display = 'block';
+                    } else {
+                        sourceFriendName.style.display = 'none';
+                        sourceFriendName.value = '';
+                    }
+                });
             });
         }
 
@@ -2247,7 +2317,7 @@
                 if (video) video.pause();
             }
             
-            if (currentPage === 7) {
+            if (currentPage === 8) {
                 displayReviewData();
             }
             
@@ -2485,7 +2555,7 @@
                     var slot = timeSlots[i];
                     var checkbox = document.getElementById(slot.checkbox);
                     var timeInput = document.getElementById(slot.input);
-                    
+
                     if (checkbox.checked && !timeInput.value.trim()) {
                         timeSlotError.textContent = '請填寫' + slot.name + '的時段範圍';
                         timeSlotError.style.display = 'block';
@@ -2494,7 +2564,18 @@
                     }
                 }
             }
-            
+
+            if (currentPage === 8) {
+                var sourceChecked = document.querySelector('input[name="source"]:checked');
+                var sourceError = document.getElementById('sourceError');
+                if (!sourceChecked) {
+                    sourceError.style.display = 'block';
+                    alert('⚠️ 請選擇在哪認識我們');
+                    return false;
+                }
+                sourceError.style.display = 'none';
+            }
+
             return true;
         }
 
@@ -2610,6 +2691,17 @@
                     formData.timePreferences.push({ slot: '彈性不固定', time: '' });
                 }
             }
+            if (currentPage === 8) {
+                var sourceChecked = document.querySelector('input[name="source"]:checked');
+                if (sourceChecked) {
+                    if (sourceChecked.value === '親友介紹') {
+                        var friendName = document.getElementById('sourceFriendName').value.trim();
+                        formData.source = friendName ? ('親友介紹：' + friendName) : '親友介紹';
+                    } else {
+                        formData.source = sourceChecked.value;
+                    }
+                }
+            }
         }
 
         function displayReviewData() {
@@ -2626,6 +2718,7 @@
             document.getElementById('edit_birthday').value = formData.birthday || '';
             document.getElementById('edit_email').value = formData.email || '';
             document.getElementById('edit_phone').value = formData.phone || '';
+            document.getElementById('edit_source_display').textContent = formData.source || '';
             
             // 設定職業
             var editOccupation = document.getElementById('edit_occupation');
@@ -2768,7 +2861,7 @@
         }
 
         async function submitToWebhook() {
-            var buttons = document.querySelectorAll('[data-page="9"] .button');
+            var buttons = document.querySelectorAll('[data-page="10"] .button');
             buttons.forEach(function(btn) {
                 btn.disabled = true;
                 btn.style.opacity = '0.6';
@@ -2794,6 +2887,7 @@
                 age: age,
                 email: formData.email || '',
                 phone: formData.phone || '',
+                source: formData.source || '',
                 occupation: formData.occupation || '',
                 applicantType: formData.applicantType || '',
                 goals: (formData.goals || []).join('、'),
@@ -2831,8 +2925,8 @@
                     document.querySelectorAll('.question-page').forEach(function(page) {
                         page.classList.remove('active');
                     });
-                    currentPage = 10;
-                    document.querySelector('[data-page="10"]').classList.add('active');
+                    currentPage = 11;
+                    document.querySelector('[data-page="11"]').classList.add('active');
                     updateProgress();
                     window.scrollTo(0, 0);
                 } else {
