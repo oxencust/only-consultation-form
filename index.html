@@ -1546,15 +1546,28 @@
 
         async function checkUserSubmitted(lineId) {
             try {
-                const result = await callEdge('checkUserSubmitted', { lineId });
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'check',
+                        lineId: lineId
+                    })
+                });
 
-                if (result.submitted === true || result.submitted === 'true') {
-                    document.querySelectorAll('.question-page').forEach(function(page) {
-                        page.classList.remove('active');
-                    });
-                    currentPage = 11;
-                    document.querySelector('[data-page="11"]').classList.add('active');
-                    updateProgress();
+                if (response.ok) {
+                    const result = await response.json();
+
+                    if (result.submitted === true || result.submitted === 'true') {
+                        document.querySelectorAll('.question-page').forEach(function(page) {
+                            page.classList.remove('active');
+                        });
+                        currentPage = 11;
+                        document.querySelector('[data-page="11"]').classList.add('active');
+                        updateProgress();
+                    }
                 }
 
                 hideLoading();
