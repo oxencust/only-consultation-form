@@ -1481,7 +1481,7 @@
                     <p class="completion-subtitle">感謝您完成問卷填寫<br>我們已收到您的資料</p>
 
                     <div style="margin-top: 25px;">
-                        <button class="button" onclick="backToLine()">返回官方LINE</button>
+                        <button class="button" onclick="goAddFriend()">加入官方LINE以利專人與您聯繫</button>
                     </div>
 
 
@@ -2952,11 +2952,12 @@
             }
         }
 
-        function backToLine() {
-            if (liff.isInClient()) {
-                liff.closeWindow();
+        function goAddFriend() {
+            const ADD_FRIEND_URL = 'https://lin.ee/rXY5wDq';
+            if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+                liff.openWindow({ url: ADD_FRIEND_URL, external: false });
             } else {
-                window.close();
+                window.location.href = ADD_FRIEND_URL;
             }
         }
 
