@@ -928,12 +928,12 @@
                         <div id="courseOnlyOptions" style="display: none; width: 100%; margin-top: 12px; padding-left: 34px;">
                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <label class="option" style="margin: 0; padding: 10px 12px;">
-                                    <input type="radio" name="courseOnlySub" value="重訓(45分鐘/$500)">
-                                    <span>重訓<small style="color: #808080; margin-left: 8px;">45分鐘/$500</small></span>
+                                    <input type="radio" name="courseOnlySub" value="重訓(45分鐘/$800)">
+                                    <span>重訓<small style="color: #808080; margin-left: 8px;">45分鐘/$800</small></span>
                                 </label>
                                 <label class="option" style="margin: 0; padding: 10px 12px;">
-                                    <input type="radio" name="courseOnlySub" value="皮拉提斯(45分鐘/$800)">
-                                    <span>皮拉提斯<small style="color: #808080; margin-left: 8px;">45分鐘/$800</small></span>
+                                    <input type="radio" name="courseOnlySub" value="皮拉提斯(45分鐘/$1200)">
+                                    <span>皮拉提斯<small style="color: #808080; margin-left: 8px;">45分鐘/$1200</small></span>
                                 </label>
                             </div>
                         </div>
@@ -1394,12 +1394,12 @@
                                     <div id="editCourseOnlyOptions" style="display: none; width: 100%; margin-top: 10px; padding-left: 30px;">
                                         <div style="display: flex; flex-direction: column; gap: 8px;">
                                             <label class="option" style="margin: 0; padding: 8px 12px;">
-                                                <input type="radio" name="editCourseOnlySub" value="重訓(45分鐘/$500)">
-                                                <span>重訓 <small style="color: #808080;">45分鐘/$500</small></span>
+                                                <input type="radio" name="editCourseOnlySub" value="重訓(45分鐘/$800)">
+                                                <span>重訓 <small style="color: #808080;">45分鐘/$800</small></span>
                                             </label>
                                             <label class="option" style="margin: 0; padding: 8px 12px;">
-                                                <input type="radio" name="editCourseOnlySub" value="皮拉提斯(45分鐘/$800)">
-                                                <span>皮拉提斯 <small style="color: #808080;">45分鐘/$800</small></span>
+                                                <input type="radio" name="editCourseOnlySub" value="皮拉提斯(45分鐘/$1200)">
+                                                <span>皮拉提斯 <small style="color: #808080;">45分鐘/$1200</small></span>
                                             </label>
                                         </div>
                                     </div>
@@ -2787,15 +2787,15 @@
                     var subRadio = document.querySelector('input[name="editCourseAISub"][value="皮拉提斯(45分鐘)"]');
                     if (subRadio) subRadio.checked = true;
                 }
-            } else if (coursesValue.includes('重訓') && coursesValue.includes('$500')) {
+            } else if (coursesValue.includes('重訓') && coursesValue.includes('$800') && !coursesValue.includes('AI 3D')) {
                 document.getElementById('editCourseOnly').checked = true;
                 document.getElementById('editCourseOnlyOptions').style.display = 'block';
-                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="重訓(45分鐘/$500)"]');
+                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="重訓(45分鐘/$800)"]');
                 if (subRadio) subRadio.checked = true;
-            } else if (coursesValue.includes('皮拉提斯') && coursesValue.includes('$800')) {
+            } else if (coursesValue.includes('皮拉提斯') && coursesValue.includes('$1200')) {
                 document.getElementById('editCourseOnly').checked = true;
                 document.getElementById('editCourseOnlyOptions').style.display = 'block';
-                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="皮拉提斯(45分鐘/$800)"]');
+                var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="皮拉提斯(45分鐘/$1200)"]');
                 if (subRadio) subRadio.checked = true;
             } else if (coursesValue.includes('肌肉賦能伸展')) {
                 document.getElementById('editCourseStretch').checked = true;
