@@ -3055,6 +3055,15 @@
             }
         }
 
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function displayReviewData() {
             document.getElementById('edit_name').value = formData.name || '';
             
@@ -3157,7 +3166,29 @@
             document.getElementById('edit_goals_display').textContent = (formData.goals || []).join('、') || '未填寫';
             document.getElementById('edit_course_display').textContent = formData.courses || '未填寫';
             document.getElementById('edit_exerciseExp_display').textContent = formData.exerciseExp || '未填寫';
-            document.getElementById('edit_diseases_display').textContent = (formData.diseases || []).join('、') || '未填寫';
+            // 疾病史排版：每項一行，含細節的展開縮排顯示
+            var diseasesEl = document.getElementById('edit_diseases_display');
+            var diseases = formData.diseases || [];
+            if (diseases.length === 0) {
+                diseasesEl.textContent = '未填寫';
+            } else {
+                var diseaseHtml = diseases.map(function(item) {
+                    // 用「: 」拆出 [標籤, 細節]
+                    var sepIdx = item.indexOf(': ');
+                    if (sepIdx === -1) {
+                        // 純標籤：高血壓 / 韌帶扭傷 / 無定期服藥 / 近期無運動傷害...
+                        return '<div style="padding: 4px 0;">• ' + escapeHtml(item) + '</div>';
+                    } else {
+                        // 含細節：惡性腫瘤: 乳癌 2023 已開刀
+                        var label = item.substring(0, sepIdx);
+                        var detail = item.substring(sepIdx + 2);
+                        return '<div style="padding: 4px 0;">• ' + escapeHtml(label) +
+                               '<div style="margin-left: 14px; font-size: 13px; color: #808080; margin-top: 2px;">└ ' +
+                               escapeHtml(detail) + '</div></div>';
+                    }
+                }).join('');
+                diseasesEl.innerHTML = diseaseHtml;
+            }
             
             var timePrefsHTML = (formData.timePreferences || []).map(function(tp) {
                 return '<p style="margin-bottom: 8px;"><strong>' + tp.slot + ':</strong> ' + (tp.time || '全時段') + '</p>';
