@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>衡點健康諮詢單</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         * {
@@ -13,8 +16,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            background: linear-gradient(135deg, #e2ede6 0%, #daedec 100%);
+            font-family: 'Noto Sans TC', 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #e8f0ea 0%, #f0f5f1 50%, #e8f0ea 100%);
             min-height: 100vh;
             padding: 15px;
             overflow-x: hidden;
@@ -67,20 +70,50 @@
                     rgba(0, 0, 0, 0.02) 75%,
                     rgba(0, 0, 0, 0.04) 100%),
                 linear-gradient(135deg, 
-                    #2d7a4d 0%, #3d8c5f 8%, #4a9d6f 16%, #58b07e 24%,
-                    #6fc99b 32%, #7ac19a 40%, #87c9a5 48%, #95d1b5 56%,
-                    #a5d8c5 64%, #aad9d9 72%, #b3dedd 80%, #bde3e3 88%,
-                    #c8e8e9 96%, #d0ecee 100%);
+                    #2d5a3d 0%, #3d7050 15%, #4d8862 30%, #5f9d74 45%,
+                    #6fb088 60%, #7ac19a 75%, #92ccab 88%, #b0d8c0 100%);
             position: relative;
             transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
             box-shadow: 
-                0 0 30px rgba(122, 193, 154, 0.6),
-                0 0 50px rgba(122, 193, 154, 0.35),
-                0 3px 12px rgba(95, 132, 111, 0.35),
+                0 0 30px rgba(95, 132, 111, 0.5),
+                0 0 50px rgba(95, 132, 111, 0.3),
+                0 3px 12px rgba(45, 90, 61, 0.35),
                 inset 0 2px 1px rgba(255, 255, 255, 0.7),
                 inset 0 -2px 1px rgba(0, 0, 0, 0.08);
             border-radius: 22px;
             overflow: hidden;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 18px 0;
+            font-size: 12px;
+            color: #5f846f;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .step-indicator .step-spacer {
+            flex: 1;
+        }
+
+        .step-indicator .required-hint {
+            font-size: 11px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .step-indicator .step-current {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2d5a3d;
+        }
+
+        .step-indicator .step-divider {
+            margin: 0 2px;
+            color: #aac3b4;
         }
 
         .content {
@@ -124,9 +157,112 @@
             max-width: 100%;
         }
 
+        /* 雙欄 grid 模式（適合 5-10 個短標籤的勾選/單選） */
+        .option-group.grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .option-group.grid-2 .option {
+            min-height: 48px;
+            padding: 12px 14px;
+            justify-content: flex-start;
+        }
+        @media (max-width: 340px) {
+            .option-group.grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 晶片 chip 模式（2 欄 grid，適合 10+ 個短標籤勾選） */
+        .option-group.chip-style {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+        .option-group.chip-style .option {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 40px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            gap: 8px;
+            transform: none !important;
+        }
+        .option-group.chip-style .option:hover {
+            transform: none !important;
+        }
+        .option-group.chip-style .option input[type="checkbox"],
+        .option-group.chip-style .option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .option-group.chip-style .option span {
+            font-size: 14px;
+            line-height: 1.3;
+        }
+        /* chip 內含展開輸入框：平時是半格 chip，勾了才跨整列 */
+        .option-group.chip-style .option.has-detail {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-radius: 12px;
+            padding: 8px 12px;
+        }
+        /* 勾選後 → 跨整列 + 切成 column 排列 + 露出 input */
+        .option-group.chip-style .option.has-detail:has(input:checked) {
+            flex-direction: column;
+            align-items: stretch;
+            grid-column: 1 / -1;
+            padding: 12px 14px;
+            gap: 8px;
+        }
+        /* has-detail 的 inner row 結構（勾選前後都用） */
+        .option-group.chip-style .option.has-detail > div:first-child {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        /* 輸入框本體：平時藏起來，勾了顯示 */
+        .option-group.chip-style .option.has-detail .detail-input {
+            display: none;
+            width: 100%;
+            margin: 0;
+        }
+        .option-group.chip-style .option.has-detail:has(input:checked) .detail-input {
+            display: block;
+        }
+        /* 超窄螢幕（極小手機）切換為單欄 */
+        @media (max-width: 340px) {
+            .option-group.chip-style {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 通用 has-detail（非 chip-style 的 option-group 內，包含普通 / grid-2）：
+           輸入框預設藏起來，勾了才出現、option 內部排版自動切成 column */
+        .option-group:not(.chip-style) .option.has-detail {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
+        }
+        .option-group:not(.chip-style) .option.has-detail .detail-input {
+            display: none;
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+        .option-group:not(.chip-style) .option.has-detail:has(input:checked) .detail-input {
+            display: block;
+        }
+
         .option {
-            background: #fff5f5;
-            border: 2px solid #ffe8e8;
+            background: #fafdfb;
+            border: 2px solid #e2ede6;
             border-radius: 12px;
             padding: 14px 16px;
             cursor: pointer;
@@ -142,28 +278,28 @@
         .option:active { transform: scale(0.98); }
 
         .option:hover {
-            background: #ffeaea;
-            border-color: #ffd5d5;
+            background: #f0f7f3;
+            border-color: #c5d5cc;
             transform: translateX(3px);
         }
 
         .option.selected {
-            background: linear-gradient(135deg, #c8e6d7 0%, #e8f5f0 100%);
-            border-color: #7ac19a;
+            background: linear-gradient(135deg, #d4e8dc 0%, #e8f5f0 100%);
+            border-color: #5f846f;
             color: #2d5a3d;
-            box-shadow: 0 4px 15px rgba(122, 193, 154, 0.5);
+            box-shadow: 0 4px 15px rgba(95, 132, 111, 0.25);
             font-weight: 600;
         }
 
         .detail-input {
             margin-top: 12px;
-            background: #fffafa !important;
-            border-color: #ffe8e8 !important;
+            background: #ffffff !important;
+            border-color: #e2ede6 !important;
             font-size: 14px;
             color: #4a6859;
         }
 
-        .detail-input::placeholder { color: #a89a9a; opacity: 0.7; font-size: 13px; }
+        .detail-input::placeholder { color: #a0b5aa; opacity: 0.7; font-size: 13px; }
         
         .text-input::placeholder { font-size: 13px; color: #999; }
 
@@ -199,8 +335,8 @@
 
         .text-input:focus {
             outline: none;
-            border-color: #7ac19a;
-            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+            border-color: #5f846f;
+            box-shadow: 0 0 0 3px rgba(95, 132, 111, 0.12);
         }
 
         .text-input:disabled {
@@ -209,7 +345,7 @@
         }
 
         .button {
-            background: linear-gradient(135deg, #7ac19a 0%, #9fcccc 100%);
+            background: linear-gradient(135deg, #5f846f 0%, #7ac19a 100%);
             color: #ffffff;
             border: none;
             border-radius: 12px;
@@ -242,8 +378,8 @@
 
         .button.secondary {
             background: #ffffff;
-            color: #7ac19a;
-            border: 2px solid #7ac19a;
+            color: #5f846f;
+            border: 2px solid #5f846f;
         }
 
         .button.warning {
@@ -261,7 +397,70 @@
             border-left: 3px solid #c67566;
         }
 
-        .required { color: #f2ac98; }
+        /* 欄位高亮：驗證失敗時用 */
+        .field-error-highlight {
+            animation: errorPulse 0.6s ease-out 2;
+            border-color: #c67566 !important;
+            box-shadow: 0 0 0 3px rgba(198, 117, 102, 0.18) !important;
+        }
+        .option-group.has-error .option {
+            animation: errorPulse 0.6s ease-out 1;
+            border-color: #c67566 !important;
+        }
+        @keyframes errorPulse {
+            0%   { box-shadow: 0 0 0 0 rgba(198, 117, 102, 0.6); }
+            50%  { box-shadow: 0 0 0 8px rgba(198, 117, 102, 0); }
+            100% { box-shadow: 0 0 0 3px rgba(198, 117, 102, 0.18); }
+        }
+
+        /* Toast：取代 alert 的浮動提示 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120%);
+            background: #c67566;
+            color: #ffffff;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(198, 117, 102, 0.35);
+            z-index: 9998;
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast::before {
+            content: '⚠️ ';
+            margin-right: 4px;
+        }
+
+        .required {
+            color: #7ac19a;
+            font-weight: 400;
+            margin-left: 2px;
+        }
+
+        /* h2 標題裡的星號 → 加大到接近標題字級，確保夠明顯 */
+        h2 .required {
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-left: 6px;
+        }
+
+        /* 小區段標題（color: #b16056）裡的星號 → 略加粗 */
+        div[style*="color: #b16056"] .required {
+            font-weight: 700;
+            font-size: 1em;
+        }
 
         input[type="date"] {
             width: 100%;
@@ -273,8 +472,8 @@
 
         input[type="date"]:focus {
             outline: none;
-            border-color: #7ac19a;
-            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+            border-color: #5f846f;
+            box-shadow: 0 0 0 3px rgba(95, 132, 111, 0.12);
         }
 
         .editable-section {
@@ -295,7 +494,7 @@
         .edit-button {
             position: absolute;
             top: 20px; right: 20px;
-            background: #7ac19a;
+            background: #5f846f;
             color: #ffffff;
             border: none;
             padding: 8px 16px;
@@ -306,7 +505,7 @@
         }
 
         .edit-button:active {
-            background: #5f846f;
+            background: #2d5a3d;
             transform: scale(0.95);
         }
 
@@ -336,8 +535,8 @@
         .edit-field select:focus,
         .edit-field textarea:focus {
             outline: none;
-            border-color: #7ac19a;
-            box-shadow: 0 0 0 3px rgba(122, 193, 154, 0.1);
+            border-color: #5f846f;
+            box-shadow: 0 0 0 3px rgba(95, 132, 111, 0.12);
         }
 
         .basic-info-grid {
@@ -411,14 +610,14 @@
 
         .completion-icon-bg {
             width: 120px; height: 120px;
-            background: linear-gradient(135deg, #7ac19a 0%, #9fcccc 100%);
+            background: linear-gradient(135deg, #5f846f 0%, #7ac19a 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
             position: relative;
-            box-shadow: 0 10px 30px rgba(122, 193, 154, 0.3);
+            box-shadow: 0 10px 30px rgba(95, 132, 111, 0.35);
             animation: success-pop 0.6s ease-out;
         }
 
@@ -462,7 +661,7 @@
         }
 
         .completion-subtitle {
-            color: #66888e;
+            color: #5f7a6a;
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 30px;
@@ -477,10 +676,10 @@
         }
 
         .completion-info-card {
-            background: linear-gradient(135deg, #e2ede6 0%, #daedec 100%);
+            background: linear-gradient(135deg, #e8f0ea 0%, #f0f5f1 100%);
             border-radius: 15px;
             padding: 20px;
-            border: 2px solid #7ac19a;
+            border: 2px solid #5f846f;
             text-align: center;
             transition: transform 0.3s ease;
         }
@@ -500,7 +699,7 @@
         }
 
         .completion-info-text {
-            color: #66888e;
+            color: #5f7a6a;
             font-size: 13px;
             line-height: 1.5;
         }
@@ -525,7 +724,7 @@
         }
 
         .completion-reminder-text {
-            color: #66888e;
+            color: #5f7a6a;
             font-size: 13px;
             line-height: 1.6;
             text-align: left;
@@ -550,7 +749,7 @@
         .loading-spinner {
             width: 50px; height: 50px;
             border: 4px solid #e2ede6;
-            border-top-color: #7ac19a;
+            border-top-color: #5f846f;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
@@ -600,7 +799,6 @@
             .edit-field label { font-size: 13px; }
             .nav-buttons { gap: 8px; }
             .nav-buttons .button { padding: 12px 15px; }
-            #venueRules { max-height: 350px !important; }
         }
         
         /* 超小螢幕 (寬度 <= 320px) */
@@ -681,6 +879,21 @@
         .gender-select-group {
             display: flex;
             gap: 10px;
+            align-items: flex-start;
+        }
+
+        /* gender-select-group 內含 has-detail 的（如 Q6 非本人）：勾選後撐高 */
+        .gender-select-group .option.has-detail {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .gender-select-group .option.has-detail .detail-input {
+            display: none;
+            width: 100%;
+            margin: 10px 0 0 0;
+        }
+        .gender-select-group .option.has-detail:has(input:checked) .detail-input {
+            display: block;
         }
         
         @media (max-width: 340px) {
@@ -806,7 +1019,6 @@
         /* 場館規範頁面響應式 */
         @media (max-width: 380px) {
             #venueRules {
-                max-height: 300px !important;
                 padding: 12px !important;
                 font-size: 13px !important;
             }
@@ -842,43 +1054,61 @@
         <div class="loading-text">載入中...</div>
     </div>
 
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast"></div>
+
     <div class="container">
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="step-indicator" id="stepIndicator">
+            <span class="required-hint"><span class="required">*</span> 為必填</span>
+            <span class="step-spacer"></span>
+            <span class="step-current" id="stepCurrent">1</span>
+            <span class="step-divider">/</span>
+            <span id="stepTotal">11</span>
         </div>
 
         <div class="content">
             <!-- Q1: 健身目標 -->
             <div class="question-page active" data-page="1">
-                <h2>您的健身目標是什麼?<span class="required">*必填</span></h2>
+                <h2>您的健身目標是什麼?<span class="required">*</span></h2>
                 <p class="subtitle">可複選多個目標</p>
-                <div class="option-group">
+                <div class="option-group grid-2">
                     <label class="option">
                         <input type="checkbox" name="goal" value="減脂">
                         <span>減脂</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="增重">
+                        <span>增重</span>
                     </label>
                     <label class="option">
                         <input type="checkbox" name="goal" value="增肌">
                         <span>增肌</span>
                     </label>
                     <label class="option">
-                        <input type="checkbox" name="goal" value="改善體態">
-                        <span>改善體態</span>
+                        <input type="checkbox" name="goal" value="體態雕塑">
+                        <span>體態雕塑</span>
                     </label>
                     <label class="option">
-                        <input type="checkbox" name="goal" value="改善痠痛/調整姿勢">
-                        <span>改善痠痛 / 調整姿勢</span>
+                        <input type="checkbox" name="goal" value="改善疼痛">
+                        <span>改善疼痛</span>
                     </label>
-                    <label class="option" style="flex-direction: column; align-items: flex-start;">
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="恢復訓練">
+                        <span>恢復訓練</span>
+                    </label>
+                    <label class="option">
+                        <input type="checkbox" name="goal" value="增強運動表現">
+                        <span>增強運動表現</span>
+                    </label>
+                    <label class="option has-detail" style="grid-column: 1 / -1;">
                         <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                            <input type="checkbox" name="goal" value="術後/產後恢復" id="surgeryRecovery">
-                            <span>術後 / 產後恢復</span>
+                            <input type="checkbox" name="goal" value="其他" id="goalOther">
+                            <span>其他</span>
                         </div>
-                        <input type="text" class="text-input" id="surgeryDetail" placeholder="請填寫什麼手術/多久前，例如：剖腹產/3個月前" style="display: none; margin-top: 10px; margin-left: 34px; width: calc(100% - 34px);">
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="goal" value="日常健康維持">
-                        <span>日常健康維持</span>
+                        <input type="text" class="text-input detail-input" id="goalOtherDetail" placeholder="請填寫您的健身目標">
                     </label>
                 </div>
                 <div id="goalError" class="error-message" style="display: none;">請至少選擇一項健身目標</div>
@@ -887,7 +1117,7 @@
 
             <!-- Q2: 課程偏好 -->
             <div class="question-page" data-page="2">
-                <h2>想預約體驗哪項課程?<span class="required">*必填</span></h2>
+                <h2>想預約體驗哪項課程?<span class="required">*</span></h2>
                 <p class="subtitle">體驗項目可參考影片</p>
                 
                 <!-- 影片區塊 -->
@@ -954,14 +1184,16 @@
 
             <!-- Q3: 運動經驗 -->
             <div class="question-page" data-page="3">
-                <h2>過往有無運動經驗?<span class="required">*必填</span></h2>
+                <h2>過往有無運動經驗?<span class="required">*</span></h2>
                 <p class="subtitle">請選擇並說明您的運動經驗</p>
                 <div class="option-group">
-                    <label class="option">
-                        <input type="radio" name="exerciseExp" value="有" id="hasExerciseExp">
-                        <span>有</span>
+                    <label class="option has-detail">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="radio" name="exerciseExp" value="有" id="hasExerciseExp">
+                            <span>有</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="exerciseExpDetail" placeholder="例如：重訓2年、瑜珈1年">
                     </label>
-                    <input type="text" class="text-input" id="exerciseExpDetail" placeholder="例如：重訓2年、瑜珈1年" style="display: none; margin-top: -5px;">
                     <label class="option">
                         <input type="radio" name="exerciseExp" value="無" id="noExerciseExp">
                         <span>無</span>
@@ -976,108 +1208,139 @@
 
             <!-- Q4: 疾病史 -->
             <div class="question-page" data-page="4">
-                <h2>疾病史 <span class="required">*必填</span></h2>
-                <p class="subtitle" style="margin-bottom: 5px;">請選擇所有與您健康史相關的疾病項目</p>
+                <h2>健康狀況 <span class="required">*</span></h2>
+                <p class="subtitle" style="margin-bottom: 5px;">請依下列分類，勾選所有與您相關的項目</p>
                 <p style="color: #b16056; font-size: 15px; line-height: 1.6; margin-top: 0; margin-bottom: 15px;">以下資訊將影響場館評估、設計課程，若未如實填寫<br>可能造成場館不知情並導致課程不適合您，<br>須自行承擔相關風險。</p>
-                
-                <div class="disease-grid">
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="心臟病">
-                        <span>心臟病</span>
+
+                <!-- 1. 慢性病史與遺傳病史 -->
+                <div style="font-weight: 600; color: #66888e; font-size: 16px; margin: 8px 0 4px; padding-left: 10px; border-left: 4px solid #9fcccc;">1. 慢性病史與遺傳病史</div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(1) 心血管疾病</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="心臟病"><span>心臟病</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="心律不整"><span>心律不整</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="心絞痛"><span>心絞痛</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(2) 循環系統疾病</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="高血壓"><span>高血壓</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="貧血"><span>貧血</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="靜脈瘤"><span>靜脈瘤</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(3) 脊椎系統疾病</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="脊椎滑脫"><span>脊椎滑脫</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="椎間盤突出"><span>椎間盤突出</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="骨刺"><span>骨刺</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="脊椎側彎"><span>脊椎側彎</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="坐骨神經痛"><span>坐骨神經痛</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="僵直性脊椎炎"><span>僵直性脊椎炎</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(4) 代謝性疾病</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="糖尿病"><span>糖尿病</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="甲狀腺亢進"><span>甲狀腺亢進</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(5) 呼吸系統疾病</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="氣喘"><span>氣喘</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="慢性阻塞性肺病(COPD)"><span>慢性阻塞性肺病(COPD)</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(6) 特定病史</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="癲癇"><span>癲癇</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="自律神經失調"><span>自律神經失調</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="疝氣"><span>疝氣</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="脫腸"><span>脫腸</span></label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="惡性腫瘤" id="tumorDisease">
+                            <span>惡性腫瘤</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="tumorDetail" placeholder="請說明部位／狀況">
                     </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="心絞痛">
-                        <span>心絞痛</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="糖尿病">
-                        <span>糖尿病</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="疝氣/脫腸">
-                        <span>疝氣/脫腸</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="高血壓">
-                        <span>高血壓</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="氣喘">
-                        <span>氣喘</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="貧血">
-                        <span>貧血</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="癲癇">
-                        <span>癲癇</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="甲狀腺問題">
-                        <span>甲狀腺問題</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="靜脈瘤">
-                        <span>靜脈瘤</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="惡性腫瘤">
-                        <span>惡性腫瘤</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="椎間盤突出">
-                        <span>椎間盤突出</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="習慣性脫臼">
-                        <span>習慣性脫臼</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="脊椎滑脫">
-                        <span>脊椎滑脫</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="骨質疏鬆症">
-                        <span>骨質疏鬆症</span>
-                    </label>
-                    <label class="option">
-                        <input type="checkbox" name="disease" value="痛風/風濕">
-                        <span>痛風/風濕</span>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="其他慢性病" id="otherChronic">
+                            <span>其他</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="otherChronicDetail" placeholder="請說明其他慢性病史">
                     </label>
                 </div>
 
-                <div class="option-group">
-                    <label class="option" style="flex-direction: column; align-items: flex-start;">
-                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                            <input type="checkbox" name="disease" value="關節問題" id="jointIssue">
-                            <span>關節問題</span>
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(7) 是否有定期服用藥物 <span class="required">*</span></div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option has-detail">
+                        <div>
+                            <input type="radio" name="medication" value="有" id="medYes">
+                            <span>有</span>
                         </div>
-                        <input type="text" class="text-input detail-input" id="jointDetail" placeholder="例如：右膝關節疼痛3個月" style="display: none; width: 100%;">
-                    </label>
-                    <label class="option" style="flex-direction: column; align-items: flex-start;">
-                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                            <input type="checkbox" name="disease" value="脊椎問題" id="spineIssue">
-                            <span>脊椎問題</span>
-                        </div>
-                        <input type="text" class="text-input detail-input" id="spineDetail" placeholder="例如：腰椎輕微突出" style="display: none; width: 100%;">
-                    </label>
-                    <label class="option" style="flex-direction: column; align-items: flex-start;">
-                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                            <input type="checkbox" name="disease" value="其他" id="otherDisease">
-                            <span>其他</span>
-                        </div>
-                        <input type="text" class="text-input detail-input" id="otherDetail" placeholder="例如：偏頭痛、鼻炎等" style="display: none; width: 100%;">
+                        <input type="text" class="text-input detail-input" id="medDetail" placeholder="請填寫藥物名稱／用途">
                     </label>
                     <label class="option">
-                        <input type="checkbox" name="disease" value="無" id="noDisease">
+                        <input type="radio" name="medication" value="無" id="medNo">
                         <span>無</span>
                     </label>
                 </div>
-                
+
+                <!-- 2. 骨骼肌肉傷病史 -->
+                <div style="font-weight: 600; color: #66888e; font-size: 16px; margin: 22px 0 4px; padding-left: 10px; border-left: 4px solid #9fcccc;">2. 骨骼肌肉傷病史</div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(1) 骨骼關節相關</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="骨質疏鬆"><span>骨質疏鬆</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="慣性脫臼"><span>慣性脫臼</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="痛風/風濕"><span>痛風/風濕</span></label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="骨折" id="fractureDisease">
+                            <span>骨折</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="fractureDetail" placeholder="請說明部位／時間">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="人工關節/內固定" id="implantDisease">
+                            <span>人工關節／內固定</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="implantDetail" placeholder="請說明部位／狀況">
+                    </label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(2) 軟組織相關</div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option"><input type="checkbox" name="disease" value="韌帶扭傷"><span>韌帶扭傷</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="肌肉拉傷/撕裂傷"><span>肌肉拉傷／撕裂傷</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="撞挫傷"><span>撞挫傷</span></label>
+                </div>
+
+                <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(3) 近期骨骼肌肉傷害或運動傷害（6個月內）<span class="required">*</span></div>
+                <div class="option-group chip-style" style="margin-bottom: 12px;">
+                    <label class="option has-detail">
+                        <div>
+                            <input type="radio" name="recentInjury" value="有" id="injuryYes">
+                            <span>有</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="injuryDetail" placeholder="請說明部位／時間／狀況">
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="recentInjury" value="無" id="injuryNo">
+                        <span>無</span>
+                    </label>
+                </div>
+
+                <!-- 3. 其他需特別注意的狀況 -->
+                <div style="font-weight: 600; color: #66888e; font-size: 16px; margin: 22px 0 6px; padding-left: 10px; border-left: 4px solid #9fcccc;">3. 其他需特別注意的狀況</div>
+                <textarea class="text-input" id="otherNoteDetail" rows="3" placeholder="若有其他需特別注意的狀況，請於此填寫（非必填）" style="width: 100%; margin-bottom: 15px;"></textarea>
+
                 <label style="display: flex; align-items: flex-start; gap: 10px; padding: 14px; background: #fef9f8; border: 2px solid #f2ac98; border-radius: 10px; cursor: pointer; margin-bottom: 15px;">
                     <input type="checkbox" id="diseaseAgree" style="margin-top: 3px; min-width: 18px; min-height: 18px; accent-color: #b16056;">
-                    <span style="font-size: 15px; color: #5f846f; line-height: 1.5;">同意以上內容均為屬實填寫，<br>如後續有發生以上狀況需優先告知教練</span>
+                    <span style="font-size: 15px; color: #5f846f; line-height: 1.5;">同意以上內容均為屬實填寫，<br>如後續有發生以上狀況將主動告知</span>
                 </label>
                 
                 <div id="diseaseError" class="error-message" style="display: none;">請至少選擇一項</div>
@@ -1100,7 +1363,7 @@
 
             <!-- Q6: 基本資料 -->
             <div class="question-page" data-page="6">
-                <h2>基本資料 <span class="required">*必填</span></h2>
+                <h2>基本資料 <span class="required">*</span></h2>
                 <p class="subtitle">請填寫您的基本資料</p>
                 
                 <div class="basic-info-grid">
@@ -1178,12 +1441,14 @@
                                 <input type="radio" name="applicantType" value="本人">
                                 <span>本人</span>
                             </label>
-                            <label class="option" style="flex: 1; margin: 0;">
-                                <input type="radio" name="applicantType" value="非本人">
-                                <span>非本人</span>
+                            <label class="option has-detail applicant-other" style="flex: 1; margin: 0;">
+                                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                                    <input type="radio" name="applicantType" value="非本人">
+                                    <span>非本人</span>
+                                </div>
+                                <input type="text" id="applicantDetail" class="text-input detail-input" placeholder="請輸入填寫人身份，例如:母親、配偶">
                             </label>
                         </div>
-                        <input type="text" id="applicantDetail" class="text-input" placeholder="請輸入填寫人身份，例如：母親、配偶" style="display: none; margin-top: 8px;">
                     </div>
                 </div>
                 
@@ -1237,9 +1502,9 @@
 
             <!-- Q8: 在哪認識我們 -->
             <div class="question-page" data-page="8">
-                <h2>在哪認識我們? <span class="required">*必填</span></h2>
+                <h2>在哪認識我們? <span class="required">*</span></h2>
                 <p class="subtitle">讓我們了解您是從哪裡得知衡點的</p>
-                <div class="option-group">
+                <div class="option-group grid-2">
                     <label class="option">
                         <input type="radio" name="source" value="路過店門口看到DM">
                         <span>路過店門口看到DM</span>
@@ -1256,13 +1521,13 @@
                         <input type="radio" name="source" value="FB">
                         <span>FB</span>
                     </label>
-                    <label class="option">
-                        <input type="radio" name="source" value="親友介紹" id="sourceFriend">
-                        <span>親友介紹</span>
+                    <label class="option has-detail" style="grid-column: 1 / -1;">
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <input type="radio" name="source" value="親友介紹" id="sourceFriend">
+                            <span>親友介紹</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="sourceFriendName" placeholder="可填寫親友名稱（選填）">
                     </label>
-                    <input type="text" class="text-input" id="sourceFriendName"
-                           placeholder="可填寫親友名稱（選填）"
-                           style="display: none; margin-top: -5px;">
                 </div>
                 <div id="sourceError" class="error-message" style="display: none;">請選擇在哪認識我們</div>
                 <div class="nav-buttons">
@@ -1353,13 +1618,15 @@
                         <label>健身目標</label>
                         <div id="edit_goals_display" style="color: #5f846f; padding: 10px; background: #f8faf9; border-radius: 8px; line-height: 1.8;"></div>
                         <div id="edit_goals_container" style="display: none;">
-                            <select id="edit_goals" class="text-input" multiple size="6" style="height: auto;">
+                            <select id="edit_goals" class="text-input" multiple size="8" style="height: auto;">
                                 <option value="減脂">減脂</option>
+                                <option value="增重">增重</option>
                                 <option value="增肌">增肌</option>
-                                <option value="改善體態">改善體態</option>
-                                <option value="改善痠痛/調整姿勢">改善痠痛/調整姿勢</option>
-                                <option value="術後/產後恢復">術後/產後恢復</option>
-                                <option value="日常健康維持">日常健康維持</option>
+                                <option value="體態雕塑">體態雕塑</option>
+                                <option value="改善疼痛">改善疼痛</option>
+                                <option value="恢復訓練">恢復訓練</option>
+                                <option value="增強運動表現">增強運動表現</option>
+                                <option value="其他">其他</option>
                             </select>
                         </div>
                     </div>
@@ -1453,12 +1720,65 @@
             <!-- Q10: 場館規範 -->
             <div class="question-page" data-page="10">
                 <h2>場館規範同意書</h2>
-                <p class="subtitle">請詳閱場館規範並同意後才能完成預約</p>
-                <div style="background: #ffffff; border: 2px solid #ffe8e8; border-radius: 12px; padding: 20px; margin-bottom: 20px; max-height: 500px; overflow-y: auto;" id="venueRules">
-                    載入中...
+                <p style="color: #5f7a6a; font-size: 14px; line-height: 1.6; margin-bottom: 8px;">為提供穩定及高品質的課程體驗，<br>敬請上課學員配合以下規範</p>
+                <p class="subtitle">請詳閱並同意後即可完成預約</p>
+                <div id="venueRules" style="background: #ffffff; border: 2px solid #e2ede6; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <div style="color: #5f846f; line-height: 1.6; font-size: 15px;">
+                        <div style="display: grid; gap: 12px; margin-bottom: 18px;">
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">1.</strong>
+                                <span><strong>採全預約制</strong><br>預約依照系統為準，不做口頭保留</span>
+                            </div>
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">2.</strong>
+                                <span>為維護三方權益，到場上課務必進行紙本及電子簽到</span>
+                            </div>
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">3.</strong>
+                                <span>除飲用水外，私人物品請寄放於置物櫃</span>
+                            </div>
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">4.</strong>
+                                <span>運動/伸展/等待區域禁止用餐</span>
+                            </div>
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">5.</strong>
+                                <span><strong>服裝規範</strong>：全館須脫鞋、須著運動服裝</span>
+                            </div>
+                            <div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;">
+                                <strong style="color: #ba9e60; flex-shrink: 0;">6.</strong>
+                                <span>正課學員若攜陪同者，陪同者不得滯留超過 15 分鐘</span>
+                            </div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #5f846f 0%, #2d5a3d 100%); color: #ffffff; padding: 18px; border-radius: 12px; margin: 18px 0; text-align: center; font-weight: 600; font-size: 14px;">
+                            為維護他人上課品質及權益，<br>場館有權拒絕未遵守規範者進入<br>※衡點健康保留最終解釋權
+                        </div>
+                        <div style="background: #faece8; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 2px solid #f2ac98;">
+                            <h3 style="color: #c67566; font-size: 17px; font-weight: 700; margin-bottom: 14px;">取消及請假規範</h3>
+                            <div style="display: grid; gap: 10px;">
+                                <div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;">
+                                    <strong>一般「取消預約」規範：</strong><br>
+                                    預約日的<span style="color: #ba9e60; font-weight: bold;">前一天晚上 8 點前</span>提出取消
+                                </div>
+                                <div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;">
+                                    <strong>臨時「請假」規範：</strong><br>
+                                    課程<span style="color: #ba9e60; font-weight: bold;">前 3 小時</span>提出請假<br>
+                                    <strong style="color: #c67566;">補課卡：300 元</strong>
+                                </div>
+                                <div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;">
+                                    <strong style="color: #c67566;">重要提醒：</strong><br>
+                                    無遵守規則皆視同「曠課」，曠課無法進行補課
+                                </div>
+                            </div>
+                        </div>
+                        <div id="venueRulesEnd" style="background: #e8f0ea; padding: 14px; border-radius: 10px; text-align: center; color: #5f7a6a; font-size: 13px;">
+                            如有疑問請洽官方 LINE<br>
+                            <span style="font-size: 12px;">衡點健康 © 2026</span>
+                        </div>
+                    </div>
                 </div>
-                <label style="display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: #f5f5f5; border-radius: 8px; cursor: not-allowed; margin-bottom: 20px; opacity: 0.6;" id="agreeRulesLabel">
-                    <input type="checkbox" id="agreeRules" style="margin-top: 3px; min-width: 20px; min-height: 20px; accent-color: #2d5a3d;" disabled>
+                <label style="display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: linear-gradient(135deg, #fcf4e3 0%, #e8f0ea 100%); border-radius: 8px; cursor: pointer; margin-bottom: 20px;" id="agreeRulesLabel">
+                    <input type="checkbox" id="agreeRules" style="margin-top: 3px; min-width: 20px; min-height: 20px; accent-color: #2d5a3d;">
                     <span>我已詳閱並同意遵守以上場館規範</span>
                 </label>
                 <div id="rulesError" class="error-message" style="display: none;">請勾選同意場館規範</div>
@@ -1605,7 +1925,7 @@
             initializeDiseaseCheckboxes();
             initializeTimeSlotCheckboxes();
             initializeExerciseExpRadio();
-            initializeSurgeryRecovery();
+            initializeGoalOther();
             loadVenueRules();
             setupPhoneInput();
             setupEmailInput();
@@ -1680,71 +2000,49 @@
         }
 
         function initializeDiseaseCheckboxes() {
-            var jointCheckbox = document.getElementById('jointIssue');
-            var spineCheckbox = document.getElementById('spineIssue');
-            var otherCheckbox = document.getElementById('otherDisease');
-            var noDiseaseCheckbox = document.getElementById('noDisease');
-            var jointDetail = document.getElementById('jointDetail');
-            var spineDetail = document.getElementById('spineDetail');
-            var otherDetail = document.getElementById('otherDetail');
-
-            jointCheckbox.addEventListener('change', function() {
-                jointDetail.style.display = this.checked ? 'block' : 'none';
-                if (!this.checked) jointDetail.value = '';
+            // 帶文字欄的勾選項目：勾了才顯示對應文字欄
+            var detailPairs = [
+                { box: 'tumorDisease', detail: 'tumorDetail' },
+                { box: 'otherChronic', detail: 'otherChronicDetail' },
+                { box: 'fractureDisease', detail: 'fractureDetail' },
+                { box: 'implantDisease', detail: 'implantDetail' }
+            ];
+            detailPairs.forEach(function(pair) {
+                var box = document.getElementById(pair.box);
+                var detail = document.getElementById(pair.detail);
+                if (!box || !detail) return;
+                // 顯示/隱藏交給 CSS :has(input:checked) 控制，JS 只負責取消勾選時清空 value
+                box.addEventListener('change', function() {
+                    if (!this.checked) detail.value = '';
+                });
             });
 
-            spineCheckbox.addEventListener('change', function() {
-                spineDetail.style.display = this.checked ? 'block' : 'none';
-                if (!this.checked) spineDetail.value = '';
+            // 是否定期服用藥物：顯示交給 CSS，JS 只清空 value
+            var medDetail = document.getElementById('medDetail');
+            document.querySelectorAll('input[name="medication"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (!medDetail) return;
+                    if (this.value === '無') medDetail.value = '';
+                });
             });
 
-            otherCheckbox.addEventListener('change', function() {
-                otherDetail.style.display = this.checked ? 'block' : 'none';
-                if (!this.checked) otherDetail.value = '';
-            });
-
-            noDiseaseCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    document.querySelectorAll('input[name="disease"]').forEach(function(cb) {
-                        if (cb !== noDiseaseCheckbox) {
-                            cb.checked = false;
-                            var parentOption = cb.closest('.option');
-                            if (parentOption) {
-                                parentOption.classList.remove('selected');
-                            }
-                        }
-                    });
-                    jointDetail.style.display = 'none';
-                    jointDetail.value = '';
-                    spineDetail.style.display = 'none';
-                    spineDetail.value = '';
-                    otherDetail.style.display = 'none';
-                    otherDetail.value = '';
-                }
-            });
-
-            document.querySelectorAll('input[name="disease"]').forEach(function(cb) {
-                if (cb !== noDiseaseCheckbox) {
-                    cb.addEventListener('change', function() {
-                        if (this.checked) {
-                            noDiseaseCheckbox.checked = false;
-                            var noDiseaseOption = noDiseaseCheckbox.closest('.option');
-                            if (noDiseaseOption) {
-                                noDiseaseOption.classList.remove('selected');
-                            }
-                        }
-                    });
-                }
+            // 近期傷害：顯示交給 CSS，JS 只清空 value
+            var injuryDetail = document.getElementById('injuryDetail');
+            document.querySelectorAll('input[name="recentInjury"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    if (!injuryDetail) return;
+                    if (this.value === '無') injuryDetail.value = '';
+                });
             });
         }
 
-        function initializeSurgeryRecovery() {
-            var surgeryCheckbox = document.getElementById('surgeryRecovery');
-            var surgeryDetail = document.getElementById('surgeryDetail');
-            
-            surgeryCheckbox.addEventListener('change', function() {
-                surgeryDetail.style.display = this.checked ? 'block' : 'none';
-                if (!this.checked) surgeryDetail.value = '';
+        function initializeGoalOther() {
+            var goalOther = document.getElementById('goalOther');
+            var goalOtherDetail = document.getElementById('goalOtherDetail');
+            if (!goalOther || !goalOtherDetail) return;
+            // 顯示/隱藏交給 CSS :has(input:checked)，JS 只清空 value
+            goalOther.addEventListener('change', function() {
+                if (!this.checked) goalOtherDetail.value = '';
             });
         }
 
@@ -1811,19 +2109,14 @@
         }
 
         function initializeExerciseExpRadio() {
-            var hasExpRadio = document.getElementById('hasExerciseExp');
             var noExpRadio = document.getElementById('noExerciseExp');
             var detailInput = document.getElementById('exerciseExpDetail');
-            
-            hasExpRadio.addEventListener('change', function() {
-                if (this.checked) {
-                    detailInput.style.display = 'block';
-                }
-            });
-            
+            if (!noExpRadio || !detailInput) return;
+
+            // 顯示/隱藏由 CSS :has(input:checked) 控制
+            // JS 只在切回「無」時清空 value
             noExpRadio.addEventListener('change', function() {
                 if (this.checked) {
-                    detailInput.style.display = 'none';
                     detailInput.value = '';
                 }
             });
@@ -1887,11 +2180,9 @@
                         this.closest('.option').classList.add('selected');
                     }
 
-                    // 親友介紹展開文字框
-                    if (this.value === '親友介紹') {
-                        sourceFriendName.style.display = 'block';
-                    } else {
-                        sourceFriendName.style.display = 'none';
+                    // 親友介紹展開文字框：display 交給 CSS :has(input:checked)
+                    // JS 只負責切回非親友時清空
+                    if (this.value !== '親友介紹' && sourceFriendName) {
                         sourceFriendName.value = '';
                     }
                 });
@@ -1904,10 +2195,8 @@
             
             applicantRadios.forEach(function(radio) {
                 radio.addEventListener('change', function() {
-                    if (this.value === '非本人') {
-                        applicantDetail.style.display = 'block';
-                    } else {
-                        applicantDetail.style.display = 'none';
+                    // display 由 CSS 控制，JS 只負責切回「本人」時清空
+                    if (this.value === '本人' && applicantDetail) {
                         applicantDetail.value = '';
                     }
                     // 更新選中樣式
@@ -2101,24 +2390,8 @@
         }
 
         function loadVenueRules() {
-            var rulesHTML = '<div style="color: #5f846f; line-height: 1.6; font-size: 15px;"><h3 style="color: #5f846f; font-size: 18px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #7ac19a;">場館規範</h3><p style="margin-bottom: 18px; color: #66888e; font-size: 14px;">為提供穩定及高品質的課程體驗，<br>敬請上課學員配合以下規範</p><div style="display: grid; gap: 12px; margin-bottom: 18px;"><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">1.</strong><span><strong>採全預約制</strong><br>預約依照系統為準，<br>不做口頭保留</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">2.</strong><span>為維護三方權益，<br>到場上課務必進行紙本及電子簽到</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">3.</strong><span>除飲用水外，<br>私人物品請寄放於置物櫃</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">4.</strong><span>運動/伸展/等待區域禁止用餐</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">5.</strong><span>服裝規範：<br>全館須脫鞋、須著運動服裝</span></div><div style="background: #fcf4e3; padding: 14px; border-radius: 10px; border-left: 4px solid #ffe08b; display: flex; gap: 8px;"><strong style="color: #ba9e60; flex-shrink: 0;">6.</strong><span>正課學員若攜陪同者，<br>陪同者不得滯留超過15分鐘</span></div></div><div style="background: linear-gradient(135deg, #66888e 0%, #5f846f 100%); color: #ffffff; padding: 18px; border-radius: 12px; margin: 18px 0; text-align: center; font-weight: 600; font-size: 14px;">為維護他人上課品質及權益，<br>場館有權拒絕未遵守規範者進入<br>※衡點健康保留最終解釋權</div><div style="background: #faece8; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 2px solid #f2ac98;"><h3 style="color: #c67566; font-size: 17px; font-weight: 700; margin-bottom: 14px;">取消及請假規範</h3><div style="display: grid; gap: 10px;"><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>一般「取消預約」規範：</strong><br>預約日的<span style="color: #ba9e60; font-weight: bold;">前一天晚上8點前</span>提出取消</div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong>臨時「請假」規範：</strong><br>課程<span style="color: #ba9e60; font-weight: bold;">前3小時</span>提出請假<br><strong style="color: #c67566;">補課卡：300元</strong></div><div style="background: #ffffff; padding: 12px; border-radius: 8px; border-left: 3px solid #f2ac98;"><strong style="color: #c67566;">重要提醒：</strong><br>無遵守規則皆視同「曠課」，<br>曠課無法進行補課</div></div></div><div style="background: #daedec; padding: 14px; border-radius: 10px; text-align: center; color: #66888e; font-size: 13px;">如有疑問請洽官方LINE<br><span style="font-size: 12px;">衡點健康 © 2025</span></div></div>';
-            
-            document.getElementById('venueRules').innerHTML = rulesHTML;
-            
-            var rulesContainer = document.getElementById('venueRules');
-            var agreeCheckbox = document.getElementById('agreeRules');
-            var agreeLabel = document.getElementById('agreeRulesLabel');
-            
-            rulesContainer.addEventListener('scroll', function() {
-                var isAtBottom = rulesContainer.scrollHeight - rulesContainer.scrollTop - rulesContainer.clientHeight < 5;
-                
-                if (isAtBottom) {
-                    agreeCheckbox.disabled = false;
-                    agreeLabel.style.cursor = 'pointer';
-                    agreeLabel.style.opacity = '1';
-                    agreeLabel.style.background = 'linear-gradient(135deg, #fcf4e3 0%, #daedec 100%)';
-                }
-            });
+            // 規範內容已直接寫在 HTML，同意框預設可勾，不需要動態邏輯
+            // 保留此函數避免其他呼叫點報錯
         }
 
         function toggleEdit(section) {
@@ -2186,7 +2459,7 @@
                     var goalsSelect = document.getElementById('edit_goals');
                     var selectedGoals = Array.from(goalsSelect.selectedOptions).map(function(opt) { return opt.value; });
                     if (selectedGoals.length === 0) {
-                        alert('請至少選擇一項健身目標');
+                        showToast('請至少選擇一項健身目標');
                         editingSections[section] = true;
                         return;
                     }
@@ -2194,20 +2467,20 @@
                     // 驗證預約體驗課程
                     var courseChecked = document.querySelector('input[name="editCourse"]:checked');
                     if (!courseChecked) {
-                        alert('請選擇預約體驗課程');
+                        showToast('請選擇預約體驗課程');
                         editingSections[section] = true;
                         return;
                     }
                     if (courseChecked.value === 'AI 3D體態檢測') {
                         if (!document.querySelector('input[name="editCourseAISub"]:checked')) {
-                            alert('請選擇體驗課程類型（重訓或皮拉提斯）');
+                            showToast('請選擇體驗課程類型（重訓或皮拉提斯）');
                             editingSections[section] = true;
                             return;
                         }
                     }
                     if (courseChecked.value === '不檢測僅體驗運動課程') {
                         if (!document.querySelector('input[name="editCourseOnlySub"]:checked')) {
-                            alert('請選擇體驗課程類型（重訓或皮拉提斯）');
+                            showToast('請選擇體驗課程類型（重訓或皮拉提斯）');
                             editingSections[section] = true;
                             return;
                         }
@@ -2216,25 +2489,25 @@
                     // 驗證運動經驗
                     var exerciseExpChecked = document.querySelector('input[name="editExerciseExp"]:checked');
                     if (!exerciseExpChecked) {
-                        alert('請選擇是否有運動經驗');
+                        showToast('請選擇是否有運動經驗');
                         editingSections[section] = true;
                         return;
                     }
                     if (exerciseExpChecked.value === '有') {
                         var expDetail = document.getElementById('edit_exerciseExp_detail').value.trim();
                         if (!expDetail) {
-                            alert('請說明您的運動經驗');
+                            showToast('請說明您的運動經驗');
                             editingSections[section] = true;
                             return;
                         }
                     }
                     
-                    // 保存健身目標（保留術後/產後恢復的詳細資訊）
+                    // 保存健身目標（保留「其他」的詳細資訊）
                     formData.goals = selectedGoals.map(function(goal) {
-                        if (goal === '術後/產後恢復') {
+                        if (goal === '其他') {
                             // 檢查原本是否有詳細資訊
                             var originalGoal = (formData.goals || []).find(function(g) {
-                                return g.startsWith('術後/產後恢復:');
+                                return g.startsWith('其他:');
                             });
                             return originalGoal || goal;
                         }
@@ -2380,135 +2653,181 @@
             window.scrollTo(0, 0);
         }
 
+        // ============================================
+        // 驗證失敗 helper：滾動 + 高亮 + Toast
+        // ============================================
+        var _toastTimer = null;
+        function showToast(message) {
+            var toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(_toastTimer);
+            _toastTimer = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2800);
+        }
+
+        // 自動滾動到指定元素 + 加紅框閃爍 + 自動 focus（如可 focus）
+        // target 可以是：DOM element / id 字串 / 一組 input 的 group 容器
+        function focusErrorField(target, opts) {
+            opts = opts || {};
+            var el = (typeof target === 'string') ? document.getElementById(target) : target;
+            if (!el) return;
+
+            // 滾動到視窗中間
+            try {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (e) {
+                el.scrollIntoView();
+            }
+
+            // 加高亮 class（一段時間後自動移除）
+            var highlightClass = opts.isGroup ? 'has-error' : 'field-error-highlight';
+            el.classList.add(highlightClass);
+            setTimeout(function() {
+                el.classList.remove(highlightClass);
+            }, 2500);
+
+            // 嘗試 focus（input/select/textarea 才有效）
+            if (!opts.skipFocus) {
+                setTimeout(function() {
+                    if (typeof el.focus === 'function') {
+                        try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+                    }
+                }, 450);
+            }
+        }
+
+        // 驗證失敗統一處理：顯示錯誤訊息、滾動 + Toast
+        // errorElId: 既有 error-message 元素 ID（用於顯示文字）
+        // message: 錯誤訊息
+        // targetId: 要滾動 + focus 的目標 ID 或 element
+        // opts: { isGroup: bool, skipFocus: bool }
+        function failValidation(errorElId, message, targetId, opts) {
+            var errEl = document.getElementById(errorElId);
+            if (errEl) {
+                errEl.textContent = message;
+                errEl.style.display = 'block';
+            }
+            showToast(message);
+            if (targetId) {
+                focusErrorField(targetId, opts);
+            } else if (errEl) {
+                focusErrorField(errEl, { skipFocus: true });
+            }
+            return false;
+        }
+
         function validateCurrentPage() {
             document.querySelectorAll('.error-message').forEach(function(el) { el.style.display = 'none'; });
             
             if (currentPage === 1) {
                 if (document.querySelectorAll('input[name="goal"]:checked').length === 0) {
-                    document.getElementById('goalError').style.display = 'block';
-                    alert('⚠️ 請至少選擇一項健身目標');
-                    return false;
+                    // 找到 goal 選項組（任一 goal input 的父 option-group）
+                    var firstGoal = document.querySelector('input[name="goal"]');
+                    var goalGroup = firstGoal ? firstGoal.closest('.option-group') : null;
+                    return failValidation('goalError', '請至少選擇一項健身目標', goalGroup, { isGroup: true, skipFocus: true });
                 }
                 
-                // 檢查術後/產後恢復文字欄
-                var surgeryCheckbox = document.getElementById('surgeryRecovery');
-                if (surgeryCheckbox.checked) {
-                    var surgeryDetail = document.getElementById('surgeryDetail').value.trim();
-                    if (!surgeryDetail) {
-                        document.getElementById('goalError').textContent = '請填寫術後/產後恢復的詳細情況';
-                        document.getElementById('goalError').style.display = 'block';
-                        alert('⚠️ 請填寫術後/產後恢復的詳細情況');
-                        return false;
+                // 檢查「其他」健身目標文字欄
+                var goalOtherCheckbox = document.getElementById('goalOther');
+                if (goalOtherCheckbox && goalOtherCheckbox.checked) {
+                    var goalOtherDetail = document.getElementById('goalOtherDetail').value.trim();
+                    if (!goalOtherDetail) {
+                        return failValidation('goalError', '請填寫其他健身目標的內容', 'goalOtherDetail');
                     }
                 }
             }
             
             if (currentPage === 2) {
                 var courseChecked = document.querySelector('input[name="course"]:checked');
-                var courseError = document.getElementById('courseError');
                 
                 if (!courseChecked) {
-                    courseError.textContent = '請選擇一項體驗課程';
-                    courseError.style.display = 'block';
-                    alert('⚠️ 請選擇一項體驗課程');
-                    return false;
+                    var firstCourse = document.querySelector('input[name="course"]');
+                    var courseGroup = firstCourse ? firstCourse.closest('.option-group') : null;
+                    return failValidation('courseError', '請選擇一項體驗課程', courseGroup, { isGroup: true, skipFocus: true });
                 }
                 
                 // 檢查 AI 3D體態檢測的子選項
                 if (courseChecked.value === 'AI 3D體態檢測') {
                     if (!document.querySelector('input[name="courseAISub"]:checked')) {
-                        courseError.textContent = '請選擇體驗課程類型（重訓或皮拉提斯）';
-                        courseError.style.display = 'block';
-                        alert('⚠️ 請選擇體驗課程類型（重訓或皮拉提斯）');
-                        return false;
+                        var firstSub = document.querySelector('input[name="courseAISub"]');
+                        var subGroup = firstSub ? firstSub.closest('.option-group, div') : null;
+                        return failValidation('courseError', '請選擇體驗課程類型（重訓或皮拉提斯）', subGroup || courseChecked.closest('label'), { isGroup: true, skipFocus: true });
                     }
                 }
                 
                 // 檢查不檢測僅體驗運動課程的子選項
                 if (courseChecked.value === '不檢測僅體驗運動課程') {
                     if (!document.querySelector('input[name="courseOnlySub"]:checked')) {
-                        courseError.textContent = '請選擇體驗課程類型（重訓或皮拉提斯）';
-                        courseError.style.display = 'block';
-                        alert('⚠️ 請選擇體驗課程類型（重訓或皮拉提斯）');
-                        return false;
+                        var firstSub2 = document.querySelector('input[name="courseOnlySub"]');
+                        var subGroup2 = firstSub2 ? firstSub2.closest('.option-group, div') : null;
+                        return failValidation('courseError', '請選擇體驗課程類型（重訓或皮拉提斯）', subGroup2 || courseChecked.closest('label'), { isGroup: true, skipFocus: true });
                     }
                 }
             }
             
             if (currentPage === 3) {
                 var exerciseExpChecked = document.querySelector('input[name="exerciseExp"]:checked');
-                var exerciseExpError = document.getElementById('exerciseExpError');
-                exerciseExpError.textContent = '請選擇是否有運動經驗';
                 
                 if (!exerciseExpChecked) {
-                    exerciseExpError.style.display = 'block';
-                    alert('⚠️ 請選擇是否有運動經驗');
-                    return false;
+                    var firstExp = document.querySelector('input[name="exerciseExp"]');
+                    var expGroup = firstExp ? firstExp.closest('.option-group') : null;
+                    return failValidation('exerciseExpError', '請選擇是否有運動經驗', expGroup, { isGroup: true, skipFocus: true });
                 }
                 if (exerciseExpChecked.value === '有') {
                     var detail = document.getElementById('exerciseExpDetail').value.trim();
                     if (!detail) {
-                        exerciseExpError.textContent = '請說明您的運動經驗';
-                        exerciseExpError.style.display = 'block';
-                        alert('⚠️ 請說明您的運動經驗');
-                        return false;
+                        return failValidation('exerciseExpError', '請說明您的運動經驗', 'exerciseExpDetail');
                     }
                 }
             }
             
             if (currentPage === 4) {
-                var diseaseError = document.getElementById('diseaseError');
-                
-                if (document.querySelectorAll('input[name="disease"]:checked').length === 0) {
-                    diseaseError.textContent = '請至少選擇一項疾病史選項';
-                    diseaseError.style.display = 'block';
-                    alert('⚠️ 請至少選擇一項疾病史選項');
-                    return false;
-                }
-                
-                // 檢查關節問題文字欄位
-                var jointIssue = document.getElementById('jointIssue');
-                if (jointIssue.checked) {
-                    var jointDetail = document.getElementById('jointDetail').value.trim();
-                    if (!jointDetail) {
-                        diseaseError.textContent = '請說明關節問題的詳細情況';
-                        diseaseError.style.display = 'block';
-                        alert('⚠️ 請說明關節問題的詳細情況');
-                        return false;
+                // 帶文字欄的勾選項目：勾了就要填內容
+                var textPairs = [
+                    { box: 'tumorDisease', detail: 'tumorDetail', msg: '請說明惡性腫瘤的詳細情況' },
+                    { box: 'otherChronic', detail: 'otherChronicDetail', msg: '請說明其他慢性病史的內容' },
+                    { box: 'fractureDisease', detail: 'fractureDetail', msg: '請說明骨折的詳細情況' },
+                    { box: 'implantDisease', detail: 'implantDetail', msg: '請說明人工關節／內固定的詳細情況' }
+                ];
+                for (var i = 0; i < textPairs.length; i++) {
+                    var box = document.getElementById(textPairs[i].box);
+                    if (box && box.checked) {
+                        var dv = document.getElementById(textPairs[i].detail).value.trim();
+                        if (!dv) {
+                            return failValidation('diseaseError', textPairs[i].msg, textPairs[i].detail);
+                        }
                     }
                 }
-                
-                // 檢查脊椎問題文字欄位
-                var spineIssue = document.getElementById('spineIssue');
-                if (spineIssue.checked) {
-                    var spineDetail = document.getElementById('spineDetail').value.trim();
-                    if (!spineDetail) {
-                        diseaseError.textContent = '請說明脊椎問題的詳細情況';
-                        diseaseError.style.display = 'block';
-                        alert('⚠️ 請說明脊椎問題的詳細情況');
-                        return false;
-                    }
+
+                // 是否定期服用藥物（必選）
+                var medChecked = document.querySelector('input[name="medication"]:checked');
+                if (!medChecked) {
+                    var medYes = document.getElementById('medYes');
+                    var medGroup = medYes ? medYes.closest('.option-group') : null;
+                    return failValidation('diseaseError', '請選擇是否有定期服用藥物', medGroup, { isGroup: true, skipFocus: true });
                 }
-                
-                // 檢查其他文字欄位
-                var otherDisease = document.getElementById('otherDisease');
-                if (otherDisease.checked) {
-                    var otherDetail = document.getElementById('otherDetail').value.trim();
-                    if (!otherDetail) {
-                        diseaseError.textContent = '請說明其他疾病的詳細情況';
-                        diseaseError.style.display = 'block';
-                        alert('⚠️ 請說明其他疾病的詳細情況');
-                        return false;
-                    }
+                if (medChecked.value === '有' && !document.getElementById('medDetail').value.trim()) {
+                    return failValidation('diseaseError', '請填寫定期服用的藥物', 'medDetail');
                 }
-                
+
+                // 近期骨骼肌肉傷害或運動傷害（必選）
+                var injuryChecked = document.querySelector('input[name="recentInjury"]:checked');
+                if (!injuryChecked) {
+                    var injuryYes = document.getElementById('injuryYes');
+                    var injuryGroup = injuryYes ? injuryYes.closest('.option-group') : null;
+                    return failValidation('diseaseError', '請選擇近期是否有骨骼肌肉或運動傷害', injuryGroup, { isGroup: true, skipFocus: true });
+                }
+                if (injuryChecked.value === '有' && !document.getElementById('injuryDetail').value.trim()) {
+                    return failValidation('diseaseError', '請說明近期傷害的詳細情況', 'injuryDetail');
+                }
+
                 // 檢查同意勾選
                 var diseaseAgree = document.getElementById('diseaseAgree');
                 if (!diseaseAgree.checked) {
-                    diseaseError.textContent = '請勾選同意以上內容均為屬實填寫';
-                    diseaseError.style.display = 'block';
-                    alert('⚠️ 請勾選同意以上內容均為屬實填寫');
-                    return false;
+                    return failValidation('diseaseError', '請勾選同意以上內容均為屬實填寫', diseaseAgree.closest('label'), { skipFocus: true });
                 }
             }
             
@@ -2520,33 +2839,42 @@
                 var day = document.getElementById('birthdayDay').value;
                 var email = document.getElementById('email').value.trim();
                 var phone = document.getElementById('phone').value.trim();
-                var errorDiv = document.getElementById('basicInfoError');
                 
-                if (!name) { errorDiv.textContent = '請輸入姓名'; errorDiv.style.display = 'block'; return false; }
-                if (!genderChecked) { errorDiv.textContent = '請選擇性別'; errorDiv.style.display = 'block'; return false; }
-                if (!year || !month || !day) { errorDiv.textContent = '請選擇完整的生日'; errorDiv.style.display = 'block'; return false; }
+                if (!name) return failValidation('basicInfoError', '請輸入姓名', 'name');
+                if (!genderChecked) {
+                    var firstGender = document.querySelector('input[name="genderSelect"]');
+                    var genderGroup = firstGender ? firstGender.closest('.option-group, div') : null;
+                    return failValidation('basicInfoError', '請選擇性別', genderGroup, { isGroup: true, skipFocus: true });
+                }
+                if (!year || !month || !day) {
+                    var birthdayTarget = !year ? 'birthdayYear' : (!month ? 'birthdayMonth' : 'birthdayDay');
+                    return failValidation('basicInfoError', '請選擇完整的生日', birthdayTarget);
+                }
                 
                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!email || !emailPattern.test(email)) { errorDiv.textContent = '請輸入有效的電子信箱'; errorDiv.style.display = 'block'; return false; }
-                if (phone.length !== 10 || !phone.startsWith('09')) { errorDiv.textContent = '請輸入正確的手機號碼'; errorDiv.style.display = 'block'; return false; }
+                if (!email || !emailPattern.test(email)) return failValidation('basicInfoError', '請輸入有效的電子信箱', 'email');
+                if (phone.length !== 10 || !phone.startsWith('09')) return failValidation('basicInfoError', '請輸入正確的手機號碼', 'phone');
                 
                 var occupation = document.getElementById('occupation').value;
-                if (!occupation) { errorDiv.textContent = '請選擇職業'; errorDiv.style.display = 'block'; return false; }
+                if (!occupation) return failValidation('basicInfoError', '請選擇職業', 'occupation');
                 if (occupation === '其他') {
                     var occupationOther = document.getElementById('occupationOther').value.trim();
-                    if (!occupationOther) { errorDiv.textContent = '請輸入您的職業'; errorDiv.style.display = 'block'; return false; }
+                    if (!occupationOther) return failValidation('basicInfoError', '請輸入您的職業', 'occupationOther');
                 }
                 
                 var applicantChecked = document.querySelector('input[name="applicantType"]:checked');
-                if (!applicantChecked) { errorDiv.textContent = '請選擇填寫人'; errorDiv.style.display = 'block'; return false; }
+                if (!applicantChecked) {
+                    var firstApplicant = document.querySelector('input[name="applicantType"]');
+                    var applicantGroup = firstApplicant ? firstApplicant.closest('.option-group, div') : null;
+                    return failValidation('basicInfoError', '請選擇填寫人', applicantGroup, { isGroup: true, skipFocus: true });
+                }
                 if (applicantChecked.value === '非本人') {
                     var applicantDetail = document.getElementById('applicantDetail').value.trim();
-                    if (!applicantDetail) { errorDiv.textContent = '請輸入填寫人身份'; errorDiv.style.display = 'block'; return false; }
+                    if (!applicantDetail) return failValidation('basicInfoError', '請輸入填寫人身份', 'applicantDetail');
                 }
             }
             
             if (currentPage === 7) {
-                var timeSlotError = document.getElementById('timeSlotError');
                 var timeSlots = [
                     { checkbox: 'weekdayDay', input: 'weekdayDayTime', name: '平日白天' },
                     { checkbox: 'weekdayNight', input: 'weekdayNightTime', name: '平日晚上' },
@@ -2557,10 +2885,9 @@
                 // 檢查是否至少勾選一個時段
                 var anyChecked = document.querySelectorAll('input[name="timeSlot"]:checked').length > 0;
                 if (!anyChecked) {
-                    timeSlotError.textContent = '請至少選擇一個上課時段';
-                    timeSlotError.style.display = 'block';
-                    alert('⚠️ 請至少選擇一個上課時段');
-                    return false;
+                    var firstSlot = document.querySelector('input[name="timeSlot"]');
+                    var slotGroup = firstSlot ? firstSlot.closest('.option-group, div') : null;
+                    return failValidation('timeSlotError', '請至少選擇一個上課時段', slotGroup, { isGroup: true, skipFocus: true });
                 }
                 
                 for (var i = 0; i < timeSlots.length; i++) {
@@ -2569,23 +2896,19 @@
                     var timeInput = document.getElementById(slot.input);
 
                     if (checkbox.checked && !timeInput.value.trim()) {
-                        timeSlotError.textContent = '請填寫' + slot.name + '的時段範圍';
-                        timeSlotError.style.display = 'block';
-                        alert('⚠️ 請填寫' + slot.name + '的時段範圍');
-                        return false;
+                        return failValidation('timeSlotError', '請填寫' + slot.name + '的時段範圍', slot.input);
                     }
                 }
             }
 
             if (currentPage === 8) {
                 var sourceChecked = document.querySelector('input[name="source"]:checked');
-                var sourceError = document.getElementById('sourceError');
                 if (!sourceChecked) {
-                    sourceError.style.display = 'block';
-                    alert('⚠️ 請選擇在哪認識我們');
-                    return false;
+                    var firstSource = document.querySelector('input[name="source"]');
+                    var sourceGroup = firstSource ? firstSource.closest('.option-group') : null;
+                    return failValidation('sourceError', '請選擇在哪認識我們', sourceGroup, { isGroup: true, skipFocus: true });
                 }
-                sourceError.style.display = 'none';
+                document.getElementById('sourceError').style.display = 'none';
             }
 
             return true;
@@ -2594,9 +2917,9 @@
         function saveCurrentPageData() {
             if (currentPage === 1) {
                 formData.goals = Array.from(document.querySelectorAll('input[name="goal"]:checked')).map(function(cb) {
-                    if (cb.value === '術後/產後恢復') {
-                        var surgeryDetail = document.getElementById('surgeryDetail').value.trim();
-                        return surgeryDetail ? '術後/產後恢復: ' + surgeryDetail : '術後/產後恢復';
+                    if (cb.value === '其他') {
+                        var goalOtherDetail = document.getElementById('goalOtherDetail').value.trim();
+                        return goalOtherDetail ? '其他: ' + goalOtherDetail : '其他';
                     }
                     return cb.value;
                 });
@@ -2630,38 +2953,54 @@
             }
             if (currentPage === 4) {
                 formData.diseases = [];
-                
+
+                // 帶文字欄的勾選項目 → "標籤: 內容"
+                var detailMap = {
+                    'tumorDisease': 'tumorDetail',
+                    'otherChronic': 'otherChronicDetail',
+                    'fractureDisease': 'fractureDetail',
+                    'implantDisease': 'implantDetail'
+                };
+
                 var allCheckedBoxes = document.querySelectorAll('input[name="disease"]:checked');
-                
                 allCheckedBoxes.forEach(function(checkbox) {
                     var checkboxId = checkbox.id;
                     var checkboxValue = checkbox.value;
-                    
-                    if (checkboxId === 'jointIssue') {
-                        var jointDetail = document.getElementById('jointDetail').value.trim();
-                        if (jointDetail) {
-                            formData.diseases.push('關節問題: ' + jointDetail);
-                        } else {
-                            formData.diseases.push('關節問題');
-                        }
-                    } else if (checkboxId === 'spineIssue') {
-                        var spineDetail = document.getElementById('spineDetail').value.trim();
-                        if (spineDetail) {
-                            formData.diseases.push('脊椎問題: ' + spineDetail);
-                        } else {
-                            formData.diseases.push('脊椎問題');
-                        }
-                    } else if (checkboxId === 'otherDisease') {
-                        var otherDetail = document.getElementById('otherDetail').value.trim();
-                        if (otherDetail) {
-                            formData.diseases.push('其他: ' + otherDetail);
-                        } else {
-                            formData.diseases.push('其他');
-                        }
+                    if (detailMap[checkboxId]) {
+                        var dv = document.getElementById(detailMap[checkboxId]).value.trim();
+                        formData.diseases.push(dv ? checkboxValue + ': ' + dv : checkboxValue);
                     } else {
                         formData.diseases.push(checkboxValue);
                     }
                 });
+
+                // 是否定期服用藥物
+                var medChecked = document.querySelector('input[name="medication"]:checked');
+                if (medChecked) {
+                    if (medChecked.value === '有') {
+                        var medDetail = document.getElementById('medDetail').value.trim();
+                        formData.diseases.push(medDetail ? '定期服藥: ' + medDetail : '定期服藥');
+                    } else {
+                        formData.diseases.push('無定期服藥');
+                    }
+                }
+
+                // 近期骨骼肌肉傷害或運動傷害
+                var injuryChecked = document.querySelector('input[name="recentInjury"]:checked');
+                if (injuryChecked) {
+                    if (injuryChecked.value === '有') {
+                        var injuryDetail = document.getElementById('injuryDetail').value.trim();
+                        formData.diseases.push(injuryDetail ? '近期傷害: ' + injuryDetail : '近期傷害');
+                    } else {
+                        formData.diseases.push('近期無運動傷害');
+                    }
+                }
+
+                // 其他需特別注意的狀況
+                var otherNote = document.getElementById('otherNoteDetail').value.trim();
+                if (otherNote) {
+                    formData.diseases.push('其他需注意: ' + otherNote);
+                }
             }
             if (currentPage === 5) {
                 formData.remarks = document.getElementById('remarks').value;
@@ -2769,7 +3108,7 @@
             
             var goalsSelect = document.getElementById('edit_goals');
             Array.from(goalsSelect.options).forEach(function(option) {
-                // 檢查是否包含該選項（考慮術後/產後恢復可能帶有詳細資訊）
+                // 檢查是否包含該選項（考慮「其他」可能帶有詳細資訊）
                 option.selected = (formData.goals || []).some(function(g) {
                     return g === option.value || g.startsWith(option.value + ':');
                 });
@@ -2787,12 +3126,14 @@
                     var subRadio = document.querySelector('input[name="editCourseAISub"][value="皮拉提斯(45分鐘)"]');
                     if (subRadio) subRadio.checked = true;
                 }
-            } else if (coursesValue.includes('重訓') && coursesValue.includes('$800') && !coursesValue.includes('AI 3D')) {
+            } else if (coursesValue.includes('重訓') && (coursesValue.includes('$800') || coursesValue.includes('$500'))) {
+                // 同時支援新價格 $800 與舊價格 $500（向後相容）
                 document.getElementById('editCourseOnly').checked = true;
                 document.getElementById('editCourseOnlyOptions').style.display = 'block';
                 var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="重訓(45分鐘/$800)"]');
                 if (subRadio) subRadio.checked = true;
-            } else if (coursesValue.includes('皮拉提斯') && coursesValue.includes('$1200')) {
+            } else if (coursesValue.includes('皮拉提斯') && (coursesValue.includes('$1200') || coursesValue.includes('$800'))) {
+                // 同時支援新價格 $1200 與舊價格 $800（向後相容）
                 document.getElementById('editCourseOnly').checked = true;
                 document.getElementById('editCourseOnlyOptions').style.display = 'block';
                 var subRadio = document.querySelector('input[name="editCourseOnlySub"][value="皮拉提斯(45分鐘/$1200)"]');
@@ -2827,7 +3168,7 @@
         function saveEditedData() {
             for (var section in editingSections) {
                 if (editingSections[section]) {
-                    alert('請先保存所有修改');
+                    showToast('請先保存所有修改');
                     return;
                 }
             }
@@ -2863,9 +3204,9 @@
         }
 
         async function submitForm() {
-            if (!document.getElementById('agreeRules').checked) {
-                document.getElementById('rulesError').style.display = 'block';
-                alert('⚠️ 請勾選同意場館規範');
+            var agreeRules = document.getElementById('agreeRules');
+            if (!agreeRules.checked) {
+                failValidation('rulesError', '請勾選同意場館規範', agreeRules.closest('label'), { skipFocus: true });
                 return;
             }
             
@@ -2895,7 +3236,7 @@
                 displayName: formData.displayName || '',
                 name: formData.name || '',
                 gender: formData.gender || '',
-                birthday: (formData.birthday || '').replace(/-/g, '/'),
+                birthday: formData.birthday || '',
                 age: age,
                 email: formData.email || '',
                 phone: formData.phone || '',
@@ -2964,6 +3305,13 @@
         function updateProgress() {
             var progress = (currentPage / totalPages) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
+            var stepCurrent = document.getElementById('stepCurrent');
+            var stepIndicator = document.getElementById('stepIndicator');
+            if (stepCurrent) stepCurrent.textContent = currentPage;
+            // 第 11 頁是「提交成功」頁，不顯示步驟指示器
+            if (stepIndicator) {
+                stepIndicator.style.display = (currentPage === 11) ? 'none' : 'flex';
+            }
         }
 
         document.addEventListener('change', function(e) {
