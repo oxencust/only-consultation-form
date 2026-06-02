@@ -1220,6 +1220,7 @@
                     <label class="option"><input type="checkbox" name="disease" value="心臟病"><span>心臟病</span></label>
                     <label class="option"><input type="checkbox" name="disease" value="心律不整"><span>心律不整</span></label>
                     <label class="option"><input type="checkbox" name="disease" value="心絞痛"><span>心絞痛</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="中風"><span>中風</span></label>
                 </div>
 
                 <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(2) 循環系統疾病</div>
@@ -1257,6 +1258,7 @@
                     <label class="option"><input type="checkbox" name="disease" value="自律神經失調"><span>自律神經失調</span></label>
                     <label class="option"><input type="checkbox" name="disease" value="疝氣"><span>疝氣</span></label>
                     <label class="option"><input type="checkbox" name="disease" value="脫腸"><span>脫腸</span></label>
+                    <label class="option"><input type="checkbox" name="disease" value="眩暈症"><span>眩暈症</span></label>
                     <label class="option has-detail">
                         <div>
                             <input type="checkbox" name="disease" value="惡性腫瘤" id="tumorDisease">
@@ -1314,9 +1316,48 @@
 
                 <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(2) 軟組織相關</div>
                 <div class="option-group chip-style" style="margin-bottom: 12px;">
-                    <label class="option"><input type="checkbox" name="disease" value="韌帶扭傷"><span>韌帶扭傷</span></label>
-                    <label class="option"><input type="checkbox" name="disease" value="肌肉拉傷/撕裂傷"><span>肌肉拉傷／撕裂傷</span></label>
-                    <label class="option"><input type="checkbox" name="disease" value="撞挫傷"><span>撞挫傷</span></label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="扭傷" id="sprainDisease">
+                            <span>扭傷</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="sprainDetail" placeholder="部位／狀況…">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="拉傷" id="strainDisease">
+                            <span>拉傷</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="strainDetail" placeholder="部位／狀況…">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="撕裂傷" id="tearDisease">
+                            <span>撕裂傷</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="tearDetail" placeholder="部位／狀況…">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="撞挫傷" id="contusionDisease">
+                            <span>撞挫傷</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="contusionDetail" placeholder="部位／狀況…">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="慢性肌腱炎" id="tendinitisDisease">
+                            <span>慢性肌腱炎</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="tendinitisDetail" placeholder="部位／狀況…">
+                    </label>
+                    <label class="option has-detail">
+                        <div>
+                            <input type="checkbox" name="disease" value="慣性扭傷" id="habitualSprainDisease">
+                            <span>慣性扭傷</span>
+                        </div>
+                        <input type="text" class="text-input detail-input" id="habitualSprainDetail" placeholder="部位／狀況…">
+                    </label>
                 </div>
 
                 <div style="font-weight: 600; color: #b16056; font-size: 14px; margin: 14px 0 6px;">(3) 近期骨骼肌肉傷害或運動傷害（6個月內）<span class="required">*</span></div>
@@ -1459,8 +1500,34 @@
                 </div>
             </div>
 
-            <!-- Q7: 上課時段 -->
+            <!-- Q7: 個人資料蒐集與利用同意（2026-05-31 新增；2026-06-02 內容更新）-->
             <div class="question-page" data-page="7">
+                <h2>👤 個人資料蒐集與利用同意 <span class="required">*</span></h2>
+                <div style="background: #ffffff; border: 2px solid #e2ede6; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                    <p style="color: #2d5a3d; font-size: 15px; font-weight: 600; text-align: center; margin: 0 0 16px 0;">
+                        【個人資料蒐集與利用同意】
+                    </p>
+                    <p style="color: #5f846f; font-size: 14px; line-height: 1.85; margin: 0 0 14px 0; text-align: justify;">
+                        本人同意衡點健康事業股份有限公司為運動諮詢、體態評估、課程規劃、運動安全管理、服務追蹤及內部品質改善之目的，蒐集、處理及利用本人提供之基本資料、健康主訴、疾病史、家族遺傳史、受傷／手術紀錄及運動相關資訊，並於必要範圍內提供予運動諮詢人員、體態評估人員、教練、行政人員及必要系統服務商使用，以利課程安排、紀錄管理與安全管理。
+                    </p>
+                    <p style="color: #5f846f; font-size: 14px; line-height: 1.85; margin: 0; text-align: justify;">
+                        本人了解本服務非醫療診斷、治療或醫療建議；如涉及疾病診斷或治療，仍應諮詢合格醫療專業人員。本人亦知悉得依法請求查詢、閱覽、更正、停止利用或刪除個人資料；若未提供或提供不完整，可能影響評估、課程建議與服務安全性。
+                    </p>
+                </div>
+
+                <label style="display: flex; align-items: flex-start; gap: 12px; padding: 16px; background: linear-gradient(135deg, #fcf4e3 0%, #e8f0ea 100%); border-radius: 8px; cursor: pointer; margin-bottom: 20px;" id="agreePrivacyLabel">
+                    <input type="checkbox" id="agreePrivacy" style="margin-top: 3px; min-width: 20px; min-height: 20px; accent-color: #2d5a3d;">
+                    <span style="font-size: 15px; color: #5f846f; line-height: 1.5;">我已閱讀並同意上述個人資料蒐集、處理及利用事項。</span>
+                </label>
+                <div id="privacyError" class="error-message" style="display: none;">請勾選同意上述個人資料蒐集、處理及利用事項</div>
+                <div class="nav-buttons">
+                    <button class="button secondary" onclick="prevPage()">上一步</button>
+                    <button class="button" onclick="nextPage()">下一步</button>
+                </div>
+            </div>
+
+            <!-- Q8: 上課時段 -->
+            <div class="question-page" data-page="8">
                 <h2>方便固定上課時段區間</h2>
                 <p class="subtitle">💡 我們會盡可能依照您的時間需求安排，<br>時段範圍可超過範例時間</p>
                 <div class="option-group">
@@ -1500,8 +1567,8 @@
                 </div>
             </div>
 
-            <!-- Q8: 在哪認識我們 -->
-            <div class="question-page" data-page="8">
+            <!-- Q9: 在哪認識我們 -->
+            <div class="question-page" data-page="9">
                 <h2>在哪認識我們? <span class="required">*</span></h2>
                 <p class="subtitle">讓我們了解您是從哪裡得知衡點的</p>
                 <div class="option-group grid-2">
@@ -1536,8 +1603,8 @@
                 </div>
             </div>
 
-            <!-- Q9: 資料確認 -->
-            <div class="question-page" data-page="9">
+            <!-- Q10: 資料確認 -->
+            <div class="question-page" data-page="10">
                 <h2>資料確認</h2>
                 <p class="subtitle">請確認所有資料正確，點擊「修改」按鈕可編輯</p>
                 
@@ -1717,8 +1784,8 @@
                 </div>
             </div>
 
-            <!-- Q10: 場館規範 -->
-            <div class="question-page" data-page="10">
+            <!-- Q11: 場館規範 -->
+            <div class="question-page" data-page="11">
                 <h2>場館規範同意書</h2>
                 <p style="color: #5f7a6a; font-size: 14px; line-height: 1.6; margin-bottom: 8px;">為提供穩定及高品質的課程體驗，<br>敬請上課學員配合以下規範</p>
                 <p class="subtitle">請詳閱並同意後即可完成預約</p>
@@ -1788,8 +1855,8 @@
                 </div>
             </div>
 
-            <!-- 完成頁面 -->
-            <div class="question-page" data-page="11">
+            <!-- Q12: 完成頁面 -->
+            <div class="question-page" data-page="12">
                 <div class="completion-modern">
                     <div class="completion-icon-wrapper">
                         <div class="completion-icon-bg">
@@ -1815,6 +1882,27 @@
     <script>
         const WEBHOOK_URL = 'https://hook.us2.make.com/6rfz9vsjnqqxr6s6bnx2cr9njax93yyg';
         const EDGE_FUNCTION_URL = 'https://mnjilhpztnowaplggvkk.supabase.co/functions/v1/member-api';
+        // 2026-05-23：諮詢單遷移 Zeabur，雙寫用。consultation-service 直接寫 Supabase（與 admin /consultation/ 同一服務）。
+        // 注意：consultation-service 的 submit 動作仍需後端實作，未完成前此 POST 會失敗，但採獨立 try/catch，不影響 Make 流程。
+        const CONSULTATION_API_URL = 'https://consultation-hendia.zeabur.app/';
+
+        // 2026-05-23：把諮詢單同步寫進 Zeabur consultation-service（獨立於 Make，失敗只記 log、不影響送出流程）。
+        async function submitToConsultationService(submitData) {
+            try {
+                const response = await fetch(CONSULTATION_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(submitData)
+                });
+                if (response.ok) {
+                    console.log('[諮詢單] Zeabur consultation-service 寫入成功');
+                } else {
+                    console.warn('[諮詢單] Zeabur consultation-service 回應非 2xx:', response.status);
+                }
+            } catch (error) {
+                console.error('[諮詢單] Zeabur consultation-service 寫入失敗（不影響 Make）:', error);
+            }
+        }
 
         // Helper function to call Edge Function
         async function callEdge(action, params) {
@@ -1832,7 +1920,7 @@
         }
 
         let currentPage = 1;
-        const totalPages = 11;
+        const totalPages = 12;
         let formData = {};
         let editingSections = {
             basic: false,
@@ -1866,7 +1954,8 @@
 
         async function checkUserSubmitted(lineId) {
             try {
-                const response = await fetch(WEBHOOK_URL, {
+                // 2026-05-23：查重改走 Supabase（Zeabur consultation-service），不再問 Make。
+                const response = await fetch(CONSULTATION_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1884,8 +1973,8 @@
                         document.querySelectorAll('.question-page').forEach(function(page) {
                             page.classList.remove('active');
                         });
-                        currentPage = 11;
-                        document.querySelector('[data-page="11"]').classList.add('active');
+                        currentPage = 12;
+                        document.querySelector('[data-page="12"]').classList.add('active');
                         updateProgress();
                     }
                 }
@@ -2005,7 +2094,14 @@
                 { box: 'tumorDisease', detail: 'tumorDetail' },
                 { box: 'otherChronic', detail: 'otherChronicDetail' },
                 { box: 'fractureDisease', detail: 'fractureDetail' },
-                { box: 'implantDisease', detail: 'implantDetail' }
+                { box: 'implantDisease', detail: 'implantDetail' },
+                // 2026-05-31：軟組織相關 6 項
+                { box: 'sprainDisease', detail: 'sprainDetail' },
+                { box: 'strainDisease', detail: 'strainDetail' },
+                { box: 'tearDisease', detail: 'tearDetail' },
+                { box: 'contusionDisease', detail: 'contusionDetail' },
+                { box: 'tendinitisDisease', detail: 'tendinitisDetail' },
+                { box: 'habitualSprainDisease', detail: 'habitualSprainDetail' }
             ];
             detailPairs.forEach(function(pair) {
                 var box = document.getElementById(pair.box);
@@ -2602,7 +2698,7 @@
                 if (video) video.pause();
             }
             
-            if (currentPage === 8) {
+            if (currentPage === 9) {
                 displayReviewData();
             }
             
@@ -2790,7 +2886,14 @@
                     { box: 'tumorDisease', detail: 'tumorDetail', msg: '請說明惡性腫瘤的詳細情況' },
                     { box: 'otherChronic', detail: 'otherChronicDetail', msg: '請說明其他慢性病史的內容' },
                     { box: 'fractureDisease', detail: 'fractureDetail', msg: '請說明骨折的詳細情況' },
-                    { box: 'implantDisease', detail: 'implantDetail', msg: '請說明人工關節／內固定的詳細情況' }
+                    { box: 'implantDisease', detail: 'implantDetail', msg: '請說明人工關節／內固定的詳細情況' },
+                    // 2026-05-31：軟組織相關 6 項
+                    { box: 'sprainDisease', detail: 'sprainDetail', msg: '請說明扭傷的部位／狀況' },
+                    { box: 'strainDisease', detail: 'strainDetail', msg: '請說明拉傷的部位／狀況' },
+                    { box: 'tearDisease', detail: 'tearDetail', msg: '請說明撕裂傷的部位／狀況' },
+                    { box: 'contusionDisease', detail: 'contusionDetail', msg: '請說明撞挫傷的部位／狀況' },
+                    { box: 'tendinitisDisease', detail: 'tendinitisDetail', msg: '請說明慢性肌腱炎的部位／狀況' },
+                    { box: 'habitualSprainDisease', detail: 'habitualSprainDetail', msg: '請說明慣性扭傷的部位／狀況' }
                 ];
                 for (var i = 0; i < textPairs.length; i++) {
                     var box = document.getElementById(textPairs[i].box);
@@ -2874,7 +2977,16 @@
                 }
             }
             
+            // 2026-05-31：Q7 個資保護同意書必須勾選（2026-06-02 文案更新）
             if (currentPage === 7) {
+                var agreePrivacy = document.getElementById('agreePrivacy');
+                if (!agreePrivacy.checked) {
+                    return failValidation('privacyError', '請勾選同意上述個人資料蒐集、處理及利用事項', agreePrivacy.closest('label'), { skipFocus: true });
+                }
+                formData.agreePrivacy = true;
+            }
+
+            if (currentPage === 8) {
                 var timeSlots = [
                     { checkbox: 'weekdayDay', input: 'weekdayDayTime', name: '平日白天' },
                     { checkbox: 'weekdayNight', input: 'weekdayNightTime', name: '平日晚上' },
@@ -2901,7 +3013,7 @@
                 }
             }
 
-            if (currentPage === 8) {
+            if (currentPage === 9) {
                 var sourceChecked = document.querySelector('input[name="source"]:checked');
                 if (!sourceChecked) {
                     var firstSource = document.querySelector('input[name="source"]');
@@ -2959,7 +3071,14 @@
                     'tumorDisease': 'tumorDetail',
                     'otherChronic': 'otherChronicDetail',
                     'fractureDisease': 'fractureDetail',
-                    'implantDisease': 'implantDetail'
+                    'implantDisease': 'implantDetail',
+                    // 2026-05-31：軟組織相關 6 項
+                    'sprainDisease': 'sprainDetail',
+                    'strainDisease': 'strainDetail',
+                    'tearDisease': 'tearDetail',
+                    'contusionDisease': 'contusionDetail',
+                    'tendinitisDisease': 'tendinitisDetail',
+                    'habitualSprainDisease': 'habitualSprainDetail'
                 };
 
                 var allCheckedBoxes = document.querySelectorAll('input[name="disease"]:checked');
@@ -3028,7 +3147,7 @@
                     }
                 }
             }
-            if (currentPage === 7) {
+            if (currentPage === 8) {
                 formData.timePreferences = [];
                 ['weekdayDay', 'weekdayNight', 'weekendDay', 'weekendNight'].forEach(function(id) {
                     var checkbox = document.getElementById(id);
@@ -3042,7 +3161,7 @@
                     formData.timePreferences.push({ slot: '彈性不固定', time: '' });
                 }
             }
-            if (currentPage === 8) {
+            if (currentPage === 9) {
                 var sourceChecked = document.querySelector('input[name="source"]:checked');
                 if (sourceChecked) {
                     if (sourceChecked.value === '親友介紹') {
@@ -3053,15 +3172,6 @@
                     }
                 }
             }
-        }
-
-        function escapeHtml(s) {
-            return String(s == null ? '' : s)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
         }
 
         function displayReviewData() {
@@ -3166,30 +3276,33 @@
             document.getElementById('edit_goals_display').textContent = (formData.goals || []).join('、') || '未填寫';
             document.getElementById('edit_course_display').textContent = formData.courses || '未填寫';
             document.getElementById('edit_exerciseExp_display').textContent = formData.exerciseExp || '未填寫';
-            // 疾病史排版：每項一行，含細節的展開縮排顯示
-            var diseasesEl = document.getElementById('edit_diseases_display');
-            var diseases = formData.diseases || [];
-            if (diseases.length === 0) {
-                diseasesEl.textContent = '未填寫';
-            } else {
-                var diseaseHtml = diseases.map(function(item) {
-                    // 用「: 」拆出 [標籤, 細節]
-                    var sepIdx = item.indexOf(': ');
-                    if (sepIdx === -1) {
-                        // 純標籤：高血壓 / 韌帶扭傷 / 無定期服藥 / 近期無運動傷害...
-                        return '<div style="padding: 4px 0;">• ' + escapeHtml(item) + '</div>';
-                    } else {
-                        // 含細節：惡性腫瘤: 乳癌 2023 已開刀
-                        var label = item.substring(0, sepIdx);
-                        var detail = item.substring(sepIdx + 2);
-                        return '<div style="padding: 4px 0;">• ' + escapeHtml(label) +
-                               '<div style="margin-left: 14px; font-size: 13px; color: #808080; margin-top: 2px;">└ ' +
-                               escapeHtml(detail) + '</div></div>';
+            // 2026-05-23：健康狀況改成「每項一行 + 含細節的展開縮排」。
+            //   每筆 formData.diseases 形如「名稱」或「名稱: 細節」(定期服藥/近期傷害/其他需注意亦同)；
+            //   有細節者把名稱當主項、細節以「└」縮排顯示在下一行。
+            (function () {
+                var diseasesEl = document.getElementById('edit_diseases_display');
+                var dlist = formData.diseases || [];
+                if (!dlist.length) {
+                    diseasesEl.textContent = '未填寫';
+                    return;
+                }
+                var esc = function (s) {
+                    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                };
+                diseasesEl.innerHTML = dlist.map(function (item) {
+                    var idx = String(item).indexOf(': ');
+                    var label = idx > -1 ? item.slice(0, idx) : item;
+                    var detail = idx > -1 ? item.slice(idx + 2) : '';
+                    var row = '<div style="display:flex;align-items:flex-start;gap:8px;">'
+                            + '<span style="line-height:1.6;">•</span>'
+                            + '<span style="line-height:1.6;">' + esc(label) + '</span></div>';
+                    if (detail) {
+                        row += '<div style="padding-left:24px;color:#9bb0a3;font-size:13px;line-height:1.5;">└ ' + esc(detail) + '</div>';
                     }
+                    return row;
                 }).join('');
-                diseasesEl.innerHTML = diseaseHtml;
-            }
-            
+            })();
+
             var timePrefsHTML = (formData.timePreferences || []).map(function(tp) {
                 return '<p style="margin-bottom: 8px;"><strong>' + tp.slot + ':</strong> ' + (tp.time || '全時段') + '</p>';
             }).join('');
@@ -3245,7 +3358,7 @@
         }
 
         async function submitToWebhook() {
-            var buttons = document.querySelectorAll('[data-page="10"] .button');
+            var buttons = document.querySelectorAll('[data-page="11"] .button');
             buttons.forEach(function(btn) {
                 btn.disabled = true;
                 btn.style.opacity = '0.6';
@@ -3295,6 +3408,9 @@
                 })
             };
             
+            // 2026-05-23：雙寫——先觸發 Zeabur 寫入（獨立、不阻塞、失敗不影響下方 Make 流程）。
+            submitToConsultationService(submitData);
+
             try {
                 var response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -3309,8 +3425,8 @@
                     document.querySelectorAll('.question-page').forEach(function(page) {
                         page.classList.remove('active');
                     });
-                    currentPage = 11;
-                    document.querySelector('[data-page="11"]').classList.add('active');
+                    currentPage = 12;
+                    document.querySelector('[data-page="12"]').classList.add('active');
                     updateProgress();
                     window.scrollTo(0, 0);
                 } else {
@@ -3341,7 +3457,7 @@
             if (stepCurrent) stepCurrent.textContent = currentPage;
             // 第 11 頁是「提交成功」頁，不顯示步驟指示器
             if (stepIndicator) {
-                stepIndicator.style.display = (currentPage === 11) ? 'none' : 'flex';
+                stepIndicator.style.display = (currentPage === 12) ? 'none' : 'flex';
             }
         }
 
